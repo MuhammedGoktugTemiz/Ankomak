@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hakkımızda - ANKOMAK</title>
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/banner.css" />
+    <link rel="icon" type="image/avif" href="icon.avif" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Banner Stilleri */
+      /* Slider Stilleri */
+      .banner {
+        position: relative;
+        height: 80vh;
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .banner-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        z-index: -1;
+      }
+
+      .banner-slide.active {
+        opacity: 1;
+      }
+
+      .banner-content {
+        position: relative;
+        z-index: 5;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 0 20px;
+        pointer-events: none;
+      }
+
+      .slider-arrow {
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        pointer-events: auto;
+      }
+
+      .slider-arrow:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.05);
+      }
+
+      .slider-arrow svg {
+        width: 24px;
+        height: 24px;
+        fill: #333;
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .slider-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .slider-dot.active {
+        background-color: white;
+      }
+      
+      /* Buton Stilleri */
+      .btn {
+        display: inline-block;
+        padding: 14px 28px;
+        margin-right: 15px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background-color: #a68e3f;
+        color: white;
+      }
+
+      .btn-secondary {
+        background-color: white;
+        color: #333;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn span {
+        margin-left: 5px;
+        transition: margin-left 0.3s;
+      }
+
+      .btn:hover span {
+        margin-left: 10px;
+      }
+      
+      /* İçerik Bölümü Stilleri */
+      .about-section {
+        display: flex;
+        flex-direction: column;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 20px;
+      }
+      
+      @media (min-width: 768px) {
+        .about-section {
+          flex-direction: row;
+          gap: 40px;
+        }
+      }
+      
+      .about-content {
+        flex: 1;
+      }
+      
+      .about-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .about-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      .mission-vision-section {
+        display: flex;
+        flex-direction: column;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 20px;
+      }
+      
+      @media (min-width: 768px) {
+        .mission-vision-section {
+          flex-direction: row-reverse;
+          gap: 40px;
+        }
+      }
+      
+      .mission-vision-content {
+        flex: 1;
+      }
+      
+      .mission-vision-image {
+        flex: 1;
+        position: relative;
+      }
+      
+      .mission-vision-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      .mission-vision-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+      }
+      
+      /* Animasyonlar */
+      #aboutSection, #aboutContent, #aboutImage,
+      #missionVisionSection, #missionVisionContent, #missionVisionImage {
+        opacity: 0;
+        transition: all 0.8s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar p-4 z-30">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="index.html">
+          <img src="img/anko_logo.png" class="h-12 w-auto" />
+        </a>
+        
+        <ul class="hidden md:flex space-x-8 menu1">
+          <li class="transition cursor-pointer font-bold">
+            <a href="index.html"
+              >Ana Sayfa <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+          <li class="transition cursor-pointer font-bold">
+            <a href="kurumsal.html"
+              >Hakkımızda <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+          <li class="transition cursor-pointer font-bold">
+            <a href="gecmisten-gunumuze-ankomak.html"
+              >Geçmişten Günümüze ANKOMAK <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+          <li class="transition cursor-pointer font-bold">
+            <a href="BasındaAnkoMak.html"
+              >Basında ANKOMAK <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+          <li class="transition cursor-pointer font-bold">
+            <a href="Makinalarımız.html"
+              >Makinalarımız <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+          <li class="transition cursor-pointer font-bold">
+            <a href="iletisim.html"
+              >İletişim <span class="left-border"></span
+              ><span class="right-border"></span
+              ><span class="bottom-border"></span
+            ></a>
+          </li>
+        </ul>
+        <button id="menuButton" class="md:hidden text-2xl">☰</button>
+      </div>
+    </nav>
+
+    <!-- Mobil Menü -->
+  <div
+    id="mobileMenu"
+    class="mobile-menu p-6 flex flex-col space-y-6 md:hidden z-40"
+  >
+    <button id="closeMenu" class="self-end text-black text-2xl font-bold">
+      X
+    </button>
+    <a class="font-bold" href="index.html">Ana Sayfa</a>
+    <a class="font-bold" href="kurumsal.html">Hakkımızda</a>
+    <a class="font-bold" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
+    <a class="font-bold" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+    <a class="font-bold" href="Makinalarımız.html">Makinalarımız</a>
+    <a class="font-bold" href="iletisim.html">İletişim</a>
+  </div>
+
+    <script>
+      const navbar = document.getElementById("navbar");
+      const menuButton = document.getElementById("menuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const closeMenu = document.getElementById("closeMenu");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      menuButton.addEventListener("click", () => {
+        mobileMenu.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      });
+
+      closeMenu.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      });
+
+      // Sayfa yüklendiğinde animasyonları tetikle
+      document.addEventListener("DOMContentLoaded", function() {
+        // Hakkımızda bölümü animasyonu
+        document.getElementById("aboutSection").style.opacity = "1";
+        document.getElementById("aboutSection").style.filter = "blur(0)";
+        document.getElementById("aboutContent").style.opacity = "1";
+        document.getElementById("aboutContent").style.transform = "translateY(0)";
+        document.getElementById("aboutImage").style.opacity = "1";
+        document.getElementById("aboutImage").style.transform = "scale(1)";
+        
+        // Misyon vizyon bölümü için Intersection Observer
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                document.getElementById("missionVisionSection").style.opacity = "1";
+                document.getElementById("missionVisionSection").style.filter = "blur(0)";
+                document.getElementById("missionVisionImage").style.opacity = "1";
+                document.getElementById("missionVisionImage").style.transform = "scale(1)";
+                document.getElementById("missionVisionContent").style.opacity = "1";
+                document.getElementById("missionVisionContent").style.transform = "translateY(0)";
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+        observer.observe(document.getElementById("missionVisionSection"));
+      });
+    </script>
+
+    <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24">
+      <!-- Banner Slider -->
+      <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN2.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN3.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN4.jpeg');"></div>
+      
+      <!-- Slider Navigation Arrows -->
+      <div class="slider-nav">
+        <div class="slider-arrow prev left-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+          </svg>
+        </div>
+        <div class="slider-arrow next right-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Slider Dots -->
+      <div class="slider-dots flex justify-center gap-2">
+        <div class="slider-dot active w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="0"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="1"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="2"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="3"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="4"></div>
+      </div>
+      
+      <!-- Banner Content -->
+       <!-- Banner Content -->
+      <div class="banner-content">
+        <br>
+        <h1 class="text-4xl md:text-5xl font-bold">
+          HAKKIMIZDA <br />
+          
+        </h1>
+        
+        <br>
+        <p class="mt-4 text-lg md:text-xl max-w-lg">
+        </p>
+      </div>
+    </section>
+
+    <!-- Banner Slider Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.banner-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const prevArrow = document.querySelector('.slider-arrow.prev');
+        const nextArrow = document.querySelector('.slider-arrow.next');
+        let currentSlide = 0;
+        const slideInterval = 5000; // 5 saniye
+        let slideTimer;
+        
+        function goToSlide(n) {
+          slides[currentSlide].classList.remove('active');
+          dots[currentSlide].classList.remove('active');
+          currentSlide = (n + slides.length) % slides.length;
+          slides[currentSlide].classList.add('active');
+          dots[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+          goToSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+          goToSlide(currentSlide - 1);
+        }
+        
+        function startSlider() {
+          slideTimer = setInterval(nextSlide, slideInterval);
+        }
+        
+        // Slider başlat
+        startSlider();
+        
+        // Dot'lara tıklama eventi
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => {
+            clearInterval(slideTimer);
+            goToSlide(index);
+            startSlider();
+          });
+        });
+        
+        // Ok butonları eventleri
+        nextArrow.addEventListener('click', () => {
+          clearInterval(slideTimer);
+          nextSlide();
+          startSlider();
+        });
+        
+        prevArrow.addEventListener('click', () => {
+          clearInterval(slideTimer);
+          prevSlide();
+          startSlider();
+        });
+        
+        // Banner'a hover olunca slider'ı durdur
+        const banner = document.querySelector('.banner');
+        banner.addEventListener('mouseenter', () => {
+          clearInterval(slideTimer);
+        });
+        
+        banner.addEventListener('mouseleave', () => {
+          startSlider();
+        });
+      });
+    </script>
+
+    <!-- Hakkımızda Bölümü -->
+    <section class="about-section" id="aboutSection">
+      <div class="about-content" id="aboutContent">
+        <h2 class="text-3xl font-bold text-[#a68e3f] mb-4">
+          ANKO MAKİNA Hakkında
+        </h2>
+
+        <p class="text-lg mb-6">
+          Fabrika Kurmak İsteyenler, İmalat Yapmak İsteyenler, Üretim Yapmak İsteyenler, Ne Üretmek İstersiniz..?
+          <br><br>
+          Ülkemizin Gelenek Ürünlerini Endüstriyele Çevirmek Dünyanın Yeni Teknolojilerini Türkiyeye Getirmek Firmaların Kalkınmasında, Sanayileşmesinde Öncülük Etmek Vesile Olmak Milli Bir Görevdir.
+        </p>
+        
+        <p class="text-lg">
+          Anko Gıda Makineleri, 1996 yılında İstanbul'da kurulmuş olan gıda sanayi başta olmak üzere küçük ve orta ölçekli işletmelere kendilerini yenileyebilmeleri ve pazarda rekabet edebilmeleri için üstün teknoloji makineleri ve ambalajları konusunda destek veren Türk geleneksel ürünlerinin endüstriyele çevrilmesi ve ihracat yapılması konusunda öncülük yapan bir kuruluştur.
+          <br><br>
+          Firmamız dünyada geliştirilen yeni teknolojileri sıkı takip etmekte ve teknolojilerin Türkiye'ye uyarlanmasında etkili rol oynamaktadır.
+          <br><br>
+          Bunun yanı sıra, özellikle unlu mamuller sektörüne yönelik; hamur içi doldurma ve şekillendirme, geleneksel yufka, börek baklava lavaş, donut kruvasan, simit, krep, çöp şiş, yumurta kırma poğaça, kurabiye, pasta, dondurma külahları ve gofret üretim hatları, hazır gıda, pastacılık ve dondurma sektörü için ambalaj malzemeleri, paketleme makineleri de firmamızın üretim alanına detaylı olarak girmektedir.
+          <br><br>
+          Bu vesileyle Türkiye'de üretim ve imalat yapmak, fabrika kurmak isteyenler için birbirinden farklı özel projelerin yerli üretim malzemeleri ve ürün portföylerini üretim fabrikamızdan temin edebilmektedirler.
+        </p>
+      </div>
+      <div class="about-image" id="aboutImage">
+        <img src="img/ana-sayfa/YB.jpeg" alt="ANKOMAK Kurucusu" />
+      </div>
+    </section>
+
+    <!-- Misyon Vizyon Bölümü -->
+    <section class="mission-vision-section" id="missionVisionSection">
+      <div class="mission-vision-image" id="missionVisionImage">
+        <div class="mission-vision-overlay"></div>
+        <img src="img/yunusbey.jpg" alt="ANKOMAK Misyon ve Vizyon" />
+      </div>
+      <div class="mission-vision-content" id="missionVisionContent">
+        <h2 class="text-3xl font-bold text-[#a68e3f] mb-4">
+          Misyonumuz Ve Vizyonumuz
+        </h2>
+
+        <p class="text-lg mb-6">
+          Anko Gıda Makineleri olarak misyonumuz; Türk geleneksel gıda ürünlerini modern teknolojilerle buluşturarak
+          endüstriyel üretime kazandırmak, bu alanda yerli ve özgün makineler geliştirerek sanayimizin kalkınmasına katkı sağlamaktır.
+          <br><br>
+          Küçük ve orta ölçekli işletmelere üstün teknolojiye sahip üretim ve paketleme çözümleri sunarak rekabet güçlerini artırmak, 
+          ülkemizde üretim yapmak isteyen girişimcilerin projelerine anahtar teslim fabrikalarla destek olmaktır.
+          <br><br>
+          Sadece makine üretmekle kalmayıp, müşterilerimizin üretim yolculuğunda ihtiyaç duydukları tüm süreçlerde 
+          çözüm ortağı olarak yer alıyor; ne üretmek istediklerini dinliyor, projelendiriyor ve uygulamaya geçiriyoruz.
+          <br><br>
+          Dünyada gelişen teknolojileri yakından takip ederek, bu yenilikleri Türk sanayisine entegre etmek; 
+          yerli üretim bilinciyle hem iç piyasada hem de uluslararası pazarda güçlü bir temsil sağlamaktır.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] text-white w-full py-8">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <a href="index.html" class="mb-4 md:mb-0">
+            <img src="img/anko_logo.png" alt="ANKOMAK" class="h-12 w-auto">
+          </a>
+          <nav class="flex flex-wrap justify-center gap-4 md:gap-8">
+            <a href="index.html" class="hover:text-gray-200">Ana Sayfa</a>
+            <a href="kurumsal.html" class="hover:text-gray-200">Hakkımızda</a>
+            <a href="gecmisten-gunumuze-ankomak.html" class="hover:text-gray-200">Geçmişten Günümüze</a>
+            <a href="BasındaAnkoMak.html" class="hover:text-gray-200">Basında ANKOMAK</a>
+            <a href="Makinalarımız.html" class="hover:text-gray-200">Makinalarımız</a>
+            <a href="iletisim.html" class="hover:text-gray-200">İletişim</a>
+          </nav>
+        </div>
+        <div class="text-center mt-6 text-sm">
+          <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
+          <p class="mt-1">Gizlilik Politikası | Yasal Uyarı</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

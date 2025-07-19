@@ -1,0 +1,63 @@
+.projects-header {
+  position: relative;
+  background: url("../img/projeler/projeler-header.avif") center/cover no-repeat;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+.projects-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(98, 86, 10, 0.4); /* Mavi overlay */
+}
+.projects-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* --- */
+.project-card {
+  border: 2px solid rgba(166, 142, 63, 0.3); /* Şeffaf kenarlık */
+  transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.project-card:hover {
+  border: 2px solid #946c0c;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.filter-btn {
+  transition: all 0.3s ease-in-out;
+}
+.filter-btn.active {
+  background-color: #946c0c;
+  color: white;
+}
+.filter-btn.inactive {
+  background-color: #d1d5db;
+  color: black;
+}
+@media (max-width: 768px) {
+  .project-card img {
+    height: 24rem;
+  }
+}
+@media (max-width: 700px) {
+  .filter-btn-container {
+    flex-direction: column;
+  }
+  .filter-btn-container button {
+    margin: 0.3rem 0 !important;
+  }
+}
+@media (max-width: 450px) {
+  .project-card img {
+    height: 12rem;
+  }
+}

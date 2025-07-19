@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basında ANKOMAK</title>
+  <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/banner.css" />
+    <link rel="icon" type="image/avif" href="icon.avif" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Banner ve Slider Stilleri */
+    .banner {
+      position: relative;
+      height: 80vh;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .banner-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: -1;
+    }
+
+    .banner-slide.active {
+      opacity: 1;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .banner-content h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    }
+
+    .banner-content p {
+      font-size: 1.25rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Slider Butonları */
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transform: translateY(-50%);
+      z-index: 10;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .slider-arrow {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .slider-arrow:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+      transform: scale(1.1);
+    }
+
+    .slider-arrow svg {
+      width: 28px;
+      height: 28px;
+      fill: #333;
+    }
+
+    /* Slider Noktaları */
+    .slider-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .slider-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .slider-dot.active {
+      background-color: white;
+      transform: scale(1.2);
+    }
+
+    .slider-dot:hover:not(.active) {
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Buton Stilleri */
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      margin-right: 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .button.primary {
+      background-color: #a68e3f;
+      color: white;
+    }
+
+    .button {
+      background-color: white;
+      color: #333;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .button span {
+      margin-left: 5px;
+      transition: margin-left 0.3s;
+    }
+
+    .button:hover span {
+      margin-left: 10px;
+    }
+
+    /* İçerik Navigasyonu */
+    .content-nav {
+      display: flex;
+      justify-content: center;
+      margin: 2rem auto;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      padding: 1rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+    }
+
+    .content-nav a {
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      margin: 0 0.5rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .content-nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Bölüm Başlıkları */
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .section-title h2 {
+      display: inline-block;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #a08017;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      border-radius: 2px;
+    }
+
+    /* Gazete Kupürleri */
+    .gallery-item {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .gallery-item img {
+      transition: transform 0.3s ease;
+      width: 100%;
+      height: auto;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(160, 128, 23, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover::before {
+      opacity: 1;
+    }
+
+    /* Video Galeri */
+    .video-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .video-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.7));
+      z-index: 1;
+    }
+
+    .video-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      color: white;
+      z-index: 2;
+      font-weight: 600;
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 3rem;
+      z-index: 2;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+
+    .video-container:hover .play-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      overflow: auto;
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      z-index: 1001;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #f8d56b;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .banner-content h1 {
+        font-size: 2rem;
+      }
+      
+      .banner-content p {
+        font-size: 1rem;
+      }
+      
+      .content-nav {
+        flex-direction: column;
+        border-radius: 10px;
+        padding: 0.5rem;
+      }
+      
+      .content-nav a {
+        margin: 0.25rem 0;
+        padding: 0.5rem 1rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav id="navbar" class="navbar p-4 z-30">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="index.html">
+        <img src="img/anko_logo.png" class="h-12 w-auto" />
+      </a>
+      
+      <ul class="hidden md:flex space-x-8 menu1">
+        <li class="transition cursor-pointer font-bold">
+          <a href="index.html"
+            >Ana Sayfa <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+        <li class="transition cursor-pointer font-bold">
+          <a href="kurumsal.html"
+            >Hakkımızda <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+        <li class="transition cursor-pointer font-bold">
+          <a href="gecmisten-gunumuze-ankomak.html"
+            >Geçmişten Günümüze <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+        <li class="transition cursor-pointer font-bold">
+          <a href="BasındaAnkoMak.html"
+            >Basında ANKOMAK <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+        <li class="transition cursor-pointer font-bold">
+          <a href="Makinalarımız.html"
+            >Makinalarımız <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+        <li class="transition cursor-pointer font-bold">
+          <a href="iletisim.html"
+            >İletişim <span class="left-border"></span
+            ><span class="right-border"></span
+            ><span class="bottom-border"></span
+          ></a>
+        </li>
+      </ul>
+      <button id="menuButton" class="md:hidden text-2xl">☰</button>
+    </div>
+  </nav>
+
+  <!-- Mobil Menü -->
+  <div id="mobileMenu" class="mobile-menu p-6 flex flex-col space-y-6 md:hidden z-40 hidden">
+    <button id="closeMenu" class="self-end text-black text-2xl font-bold">
+      X
+    </button>
+    <a class="font-bold" href="index.html">Ana Sayfa</a>
+    <a class="font-bold" href="kurumsal.html">Hakkımızda</a>
+    <a class="font-bold" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze</a>
+    <a class="font-bold" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+    <a class="font-bold" href="Makinalarımız.html">Makinalarımız</a>
+    <a class="font-bold" href="iletisim.html">İletişim</a>
+  </div>
+
+  <!-- Banner Slider -->
+  <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24">
+    <!-- Banner Slider -->
+   <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN2.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN3.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN4.jpeg');"></div>
+
+    <!-- Slider Navigation Arrows -->
+    <div class="slider-nav">
+      <div class="slider-arrow prev">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+        </svg>
+      </div>
+      <div class="slider-arrow next">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- Slider Dots -->
+    <div class="slider-dots">
+      <div class="slider-dot active" data-index="0"></div>
+      <div class="slider-dot" data-index="1"></div>
+      <div class="slider-dot" data-index="2"></div>
+      <div class="slider-dot" data-index="3"></div>
+      <div class="slider-dot" data-index="4"></div>
+    </div>
+    
+    <!-- Banner Content -->
+    <div class="banner-content">
+      <h1 class="text-4xl md:text-5xl font-bold">
+        BASINDA ANKOMAK
+      </h1>
+      <p class="mt-4 text-lg md:text-xl max-w-lg">
+        Medyada yer alan haberlerimiz, röportajlarımız ve başarı hikayelerimiz
+      </p>
+      
+    </div>
+  </section>
+
+  <!-- İçerik Navigasyonu -->
+  <div class="content-nav">
+    <a href="#gazete-kupurleri"><i class="fas fa-newspaper mr-2"></i>Gazete Kupürleri</a>
+    <a href="#video-haberler"><i class="fas fa-video mr-2"></i>Video Haberler Ve Radyo Konuşmaları</a>
+  </div>
+
+  <!-- İçerik -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- Gazete Kupürleri -->
+    <section id="gazete-kupurleri" class="py-8">
+      <div class="section-title">
+        <h2>Gazete Kupürleri</h2>
+      </div>
+      
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <p class="text-lg text-gray-700">Yıllar içinde ulusal ve yerel basında yer alan haberlerimiz, ANKOMAK'ın sektördeki başarısının ve yenilikçi yaklaşımının bir göstergesidir.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0081-1.jpg')">
+          <img src="img/basında/gazete/Scan0081-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0082-1.jpg')">
+          <img src="img/basında/gazete/Scan0082-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0083-1.jpg')">
+          <img src="img/basında/gazete/Scan0083-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0084-1.jpg')">
+          <img src="img/basında/gazete/Scan0084-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0085-1.jpg')">
+          <img src="img/basında/gazete/Scan0085-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0086-1.jpg')">
+          <img src="img/basında/gazete/Scan0086-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0087-1.jpg')">
+          <img src="img/basında/gazete/Scan0087-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0088-1.jpg')">
+          <img src="img/basında/gazete/Scan0088-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0089-1.jpg')">
+          <img src="img/basında/gazete/Scan0089-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0090-1.jpg')">
+          <img src="img/basında/gazete/Scan0090-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0091-1.jpg')">
+          <img src="img/basında/gazete/Scan0091-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0092-1.jpg')">
+          <img src="img/basında/gazete/Scan0092-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0093-1.jpg')">
+          <img src="img/basında/gazete/Scan0093-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0094-1.jpg')">
+          <img src="img/basında/gazete/Scan0094-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0095-1.jpg')">
+          <img src="img/basında/gazete/Scan0095-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0096-1.jpg')">
+          <img src="img/basında/gazete/Scan0096-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/Scan0097-1.jpg')">
+          <img src="img/basında/gazete/Scan0097-1.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+        
+        <div class="gallery-item" onclick="openModal('img/basında/gazete/TÜRK MUTFAĞI DONUK ÜRÜNLERLE DÜNYAYA AÇILABİLİR.jpg')">
+          <img src="img/basında/gazete/TÜRK MUTFAĞI DONUK ÜRÜNLERLE DÜNYAYA AÇILABİLİR.jpg" alt="Gazete Kupürü" class="w-full h-auto">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <i class="fas fa-search-plus text-white text-4xl"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Galeri -->
+<section id="video-haberler" class="py-8">
+  <div class="section-title">
+    <h2>Video Haberler Ve Radyo Konuşmaları</h2>
+  </div>
+  
+  <div class="mb-8 text-center max-w-3xl mx-auto">
+    <p class="text-lg text-gray-700">Televizyon kanallarında yayınlanan haberlerimiz ve röportajlarımız, ANKOMAK'ın sektördeki lider konumunu gözler önüne seriyor.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Video 1 -->
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="JQ8kHQmFLQI">
+      <img src="https://img.youtube.com/vi/nYL-xoFtJQU/maxresdefault.jpg" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        MERTEM A.Ş ve ANKO Gıda Makinaları Yönetim Kurulu Genel Müdürü Yunus Ulupınar Radyo Röportajı
+      </div>
+    </div>
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="JQ8kHQmFLQI">
+      <img src="https://img.youtube.com/vi/CArObgS54ZA/maxresdefault.jpg" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        MERTEM A.Ş ve ANKO Gıda Makinaları Yönetim Kurulu Genel Müdürü Yunus Ulupınar Radyo Röportajı-2
+      </div>
+    </div>
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="JQ8kHQmFLQI">
+      <img src="https://img.youtube.com/vi/kM-bfrUimWo/maxresdefault.jpg" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        MERTEM A.Ş ve ANKO Gıda Makinaları Yönetim Kurulu Genel Müdürü Yunus Ulupınar Radyo Röportajı-3
+      </div>
+    </div>
+    
+    <!-- Video 2 -->
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="roa8i_-s_oQ">
+      <img src="https://img.youtube.com/vi/roa8i_-s_oQ/maxresdefault.jpg" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        TV24'te ANKOMAK
+      </div>
+    </div>
+    
+    <!-- Video 3 -->
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="j7YSOQ7q8SY">
+      <img src="https://img.youtube.com/vi/j7YSOQ7q8SY/maxresdefault.jpg" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        TGRT Haber'de ANKOMAK
+      </div>
+    </div>
+    
+    <!-- Video 4 -->
+    <div class="video-wrapper relative rounded-lg overflow-hidden shadow-lg" data-video-id="w0lUrP4Noms">
+      <img src="https://youtu.be/w0lUrP4Noms" alt="Video thumbnail" class="w-full h-full object-cover">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <button class="play-button bg-red-600 rounded-full w-16 h-16 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-8 h-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+      </div>
+      <div class="video-title absolute bottom-0 left-0 right-0 p-4 text-white font-semibold z-10 bg-gradient-to-t from-black/80 to-transparent">
+        TV Programında ANKOMAK
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Oynatma Scripti -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const videoWrappers = document.querySelectorAll('.video-wrapper');
+  
+  videoWrappers.forEach(wrapper => {
+    wrapper.addEventListener('click', function() {
+      const videoId = this.getAttribute('data-video-id');
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.classList.add('w-full', 'h-full', 'absolute', 'top-0', 'left-0');
+      
+      this.innerHTML = '';
+      this.appendChild(iframe);
+    });
+  });
+});
+</script>
+
+<style>
+.video-wrapper {
+  aspect-ratio: 16/9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.video-wrapper:hover .play-button {
+  transform: scale(1.1);
+  background-color: #ff0000;
+}
+
+.play-button {
+  transition: all 0.3s ease;
+}
+
+.video-title {
+  transition: opacity 0.3s ease;
+}
+
+.video-wrapper:hover .video-title {
+  opacity: 1;
+}
+</style>
+
+  </main>
+
+  <!-- Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] text-white w-full py-8">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <a href="index.html" class="mb-4 md:mb-0">
+          <img src="img/anko_logo.png" alt="ANKOMAK" class="h-12 w-auto">
+        </a>
+        <nav class="flex flex-wrap justify-center gap-4 md:gap-8">
+          <a href="index.html" class="hover:text-gray-200">Ana Sayfa</a>
+          <a href="kurumsal.html" class="hover:text-gray-200">Hakkımızda</a>
+          <a href="gecmisten-gunumuze-ankomak.html" class="hover:text-gray-200">Geçmişten Günümüze</a>
+          <a href="BasındaAnkoMak.html" class="hover:text-gray-200">Basında ANKOMAK</a>
+          <a href="Makinalarımız.html" class="hover:text-gray-200">Makinalarımız</a>
+          <a href="iletisim.html" class="hover:text-gray-200">İletişim</a>
+        </nav>
+      </div>
+      <div class="text-center mt-6 text-sm">
+        <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
+        <p class="mt-1">Gizlilik Politikası | Yasal Uyarı</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+    const menuButton = document.getElementById("menuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMenu = document.getElementById("closeMenu");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    // Mobile menu toggle
+    menuButton.addEventListener("click", () => {
+      mobileMenu.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    });
+
+    closeMenu.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      document.body.style.overflow = "auto";
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!mobileMenu.contains(event.target) && event.target !== menuButton) {
+        mobileMenu.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+    });
+
+    // Slider Script
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelectorAll('.banner-slide');
+      const dots = document.querySelectorAll('.slider-dot');
+      const prevArrow = document.querySelector('.slider-arrow.prev');
+      const nextArrow = document.querySelector('.slider-arrow.next');
+      let currentSlide = 0;
+      const slideInterval = 5000;
+      let slideTimer;
+
+      function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        currentSlide = (n + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      function prevSlide() {
+        goToSlide(currentSlide - 1);
+      }
+
+      function startSlider() {
+        slideTimer = setInterval(nextSlide, slideInterval);
+      }
+
+      // İlk slaytı aktif et
+      slides[0].classList.add('active');
+      dots[0].classList.add('active');
+      
+      // Slider'ı başlat
+      startSlider();
+
+      // Dot'lara tıklama eventi
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          clearInterval(slideTimer);
+          goToSlide(index);
+          startSlider();
+        });
+      });
+
+      // Ok butonları eventleri
+      nextArrow.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        nextSlide();
+        startSlider();
+      });
+
+      prevArrow.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        prevSlide();
+        startSlider();
+      });
+
+      // Banner'a hover olunca slider'ı durdur
+      const banner = document.querySelector('.banner');
+      banner.addEventListener('mouseenter', () => {
+        clearInterval(slideTimer);
+      });
+
+      banner.addEventListener('mouseleave', () => {
+        startSlider();
+      });
+    });
+
+    // Modal functions
+    function openModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = "block";
+      modalImg.src = imageSrc;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    // Close modal when clicking outside of image
+    window.onclick = function(event) {
+      const modal = document.getElementById('imageModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+
+    // Video play/pause
+    document.querySelectorAll('.video-container video').forEach(video => {
+      video.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (video.paused) {
+          video.play();
+          video.parentElement.querySelector('.play-icon').style.display = 'none';
+        } else {
+          video.pause();
+          video.parentElement.querySelector('.play-icon').style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

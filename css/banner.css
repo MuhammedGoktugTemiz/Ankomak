@@ -1,0 +1,122 @@
+/* css/banner.css */
+.banner {
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  padding-top: 80px;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.banner-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.banner-slide.active {
+  opacity: 1;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-top: 5%;
+  max-width: 800px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.button:hover {
+  background-color: #e0e0e0;
+}
+
+.button.primary {
+  background-color: #a68e3f;
+  color: white;
+}
+
+.button.primary:hover {
+  background-color: #8a7634;
+}
+
+/* Slider Dots */
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+}
+
+.slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.slider-dot.active {
+  background-color: white;
+}
+
+/* Slider Navigation Arrows */
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.slider-arrow {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 10;
+  border: 2px solid #fff;
+}
+
+.slider-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slider-arrow svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}

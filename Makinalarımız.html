@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makinalarımız</title>
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/banner.css" />
+    <link rel="icon" type="image/avif" href="icon.avif" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Image Modal Styling */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            object-fit: contain;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        /* Card Styling */
+        .machine-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .machine-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .machine-card img {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            object-fit: contain;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+        
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        
+        .card-content h3 {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobil Menü Stilleri */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100%;
+            background-color: white;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-menu.open {
+            right: 0;
+        }
+        
+        .mobile-menu a {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+    /* Banner ve Slider Stilleri */
+    .banner {
+      position: relative;
+      height: 80vh;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .banner-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: -1;
+    }
+
+    .banner-slide.active {
+      opacity: 1;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .banner-content h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    }
+
+    .banner-content p {
+      font-size: 1.25rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Slider Butonları */
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transform: translateY(-50%);
+      z-index: 10;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .slider-arrow {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .slider-arrow:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+      transform: scale(1.1);
+    }
+
+    .slider-arrow svg {
+      width: 28px;
+      height: 28px;
+      fill: #333;
+    }
+
+    /* Slider Noktaları */
+    .slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+    .slider-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .slider-dot.active {
+      background-color: white;
+      transform: scale(1.2);
+    }
+
+    .slider-dot:hover:not(.active) {
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Buton Stilleri */
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      margin-right: 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .button.primary {
+      background-color: #a68e3f;
+      color: white;
+    }
+
+    .button {
+      background-color: white;
+      color: #333;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .button span {
+      margin-left: 5px;
+      transition: margin-left 0.3s;
+    }
+
+    .button:hover span {
+      margin-left: 10px;
+    }
+
+    /* İçerik Navigasyonu */
+    .content-nav {
+      display: flex;
+      justify-content: center;
+      margin: 2rem auto;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      padding: 1rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+    }
+
+    .content-nav a {
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      margin: 0 0.5rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .content-nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Bölüm Başlıkları */
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .section-title h2 {
+      display: inline-block;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #a08017;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      border-radius: 2px;
+    }
+
+    /* Gazete Kupürleri */
+    .gallery-item {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .gallery-item img {
+      transition: transform 0.3s ease;
+      width: 100%;
+      height: auto;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(160, 128, 23, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover::before {
+      opacity: 1;
+    }
+
+    /* Video Galeri */
+    .video-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .video-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.7));
+      z-index: 1;
+    }
+
+    .video-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      color: white;
+      z-index: 2;
+      font-weight: 600;
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 3rem;
+      z-index: 2;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+
+    .video-container:hover .play-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      overflow: auto;
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      z-index: 1001;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #f8d56b;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Back Button Hover Effect */
+    .back-button:hover {
+      background: #8a6d15;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(160, 128, 23, 0.3);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .banner-content h1 {
+        font-size: 2rem;
+      }
+      
+      .banner-content p {
+        font-size: 1rem;
+      }
+      
+      .content-nav {
+        flex-direction: column;
+        border-radius: 10px;
+        padding: 0.5rem;
+      }
+      
+      .content-nav a {
+        margin: 0.25rem 0;
+        padding: 0.5rem 1rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .page-header {
+        padding: 0 1rem !important;
+      }
+      
+      .header-container h1 {
+        font-size: 2rem !important;
+      }
+    }
+  </style>
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar p-4 z-30">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html"><img src="img/anko_logo.png" class="h-12 w-auto"></a>
+            <ul class="hidden md:flex space-x-8 menu1">
+                <li><a href="index.html" class="font-bold">Ana Sayfa</a></li>
+                <li><a href="kurumsal.html" class="font-bold">Hakkımızda</a></li>
+                <li><a href="gecmisten-gunumuze-ankomak.html" class="font-bold">Geçmişten Günümüze ANKOMAK</a></li>
+                <li><a href="BasındaAnkoMak.html" class="font-bold">Basında ANKOMAK</a></li>
+                <li><a href="Makinalarımız.html" class="font-bold">Makinalarımız</a></li>
+                <li><a href="iletisim.html" class="font-bold">İletişim</a></li>
+            </ul>
+            <button id="menuButton" class="md:hidden text-2xl">☰</button>
+        </div>
+    </nav>
+
+    <!-- Banner Slider Başlangıç -->
+    <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24">
+      <!-- Banner Slider -->
+      <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN2.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN3.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN4.jpeg');"></div>
+      
+      <!-- Slider Navigation Arrows -->
+      <div class="slider-nav">
+        <div class="slider-arrow prev left-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+          </svg>
+        </div>
+        <div class="slider-arrow next right-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Slider Dots -->
+      <div class="slider-dots flex justify-center gap-2">
+        <div class="slider-dot active w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="0"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="1"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="2"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="3"></div>
+      </div>
+      
+      <!-- Banner Content -->
+      <div class="banner-content">
+        <br>
+        <h1 class="text-4xl md:text-5xl font-bold">
+          MAKİNALARIMIZ <br />
+          
+        </h1>
+        
+        
+      </div>
+    </section>
+    <!-- Banner Slider Bitiş -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.banner-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const prevArrow = document.querySelector('.slider-arrow.prev');
+        const nextArrow = document.querySelector('.slider-arrow.next');
+        let currentSlide = 0;
+        const slideInterval = 5000; // 5 saniye
+        let slideTimer;
+        
+        function goToSlide(n) {
+          slides[currentSlide].classList.remove('active');
+          dots[currentSlide].classList.remove('active');
+          currentSlide = (n + slides.length) % slides.length;
+          slides[currentSlide].classList.add('active');
+          dots[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+          goToSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+          goToSlide(currentSlide - 1);
+        }
+        
+        function startSlider() {
+          slideTimer = setInterval(nextSlide, slideInterval);
+        }
+        
+        // Slider başlat
+        startSlider();
+        
+        // Dot'lara tıklama eventi
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => {
+            clearInterval(slideTimer);
+            goToSlide(index);
+            startSlider();
+          });
+        });
+        
+        // Ok butonları eventleri
+        nextArrow.addEventListener('click', () => {
+          clearInterval(slideTimer);
+          nextSlide();
+          startSlider();
+        });
+        
+        prevArrow.addEventListener('click', () => {
+          clearInterval(slideTimer);
+          prevSlide();
+          startSlider();
+        });
+        
+        // Banner'a hover olunca slider'ı durdur
+        const banner = document.querySelector('.banner');
+        banner.addEventListener('mouseenter', () => {
+          clearInterval(slideTimer);
+        });
+        
+        banner.addEventListener('mouseleave', () => {
+          startSlider();
+        });
+      });
+    </script>
+
+    <!-- Mobil Menü -->
+    <div id="mobileMenu" class="mobile-menu p-6 flex flex-col space-y-6 md:hidden z-40">
+        <button id="closeMenu" class="self-end text-black text-2xl font-bold">X</button>
+        <a class="font-bold" href="index.html">Ana Sayfa</a>
+        <a class="font-bold" href="kurumsal.html">Hakkımızda</a>
+        <a class="font-bold" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
+        <a class="font-bold" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+        <a class="font-bold" href="Makinalarımız.html">Makinalarımız</a>
+        <a class="font-bold" href="iletisim.html">İletişim</a>
+    </div>
+
+    <script>
+        const navbar = document.getElementById("navbar");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeMenu = document.getElementById("closeMenu");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+
+        menuButton.addEventListener("click", () => {
+            mobileMenu.classList.add("open");
+            document.body.style.overflow = "hidden"; // Sayfa kaydırmayı engelle
+        });
+
+        closeMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("open");
+            document.body.style.overflow = "auto"; // Sayfa kaydırmayı tekrar aktif et
+        });
+
+        // Mobil menü dışına tıklandığında kapat
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.contains(event.target) && event.target !== menuButton) {
+                mobileMenu.classList.remove("open");
+                document.body.style.overflow = "auto";
+            }
+        });
+    </script>
+
+    <!-- Page Header -->
+    <div class="page-header" style="margin-top: 3rem; padding: 0 2rem;">
+        <div class="header-container" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+           
+            <h1 style="font-size: 2.5rem; font-weight: 700; color: #a08017; margin: 0; text-align: center; flex: 1;">MAKİNALARIMIZ</h1>
+        </div>
+    </div>
+
+    <!-- Makine Kartları -->
+    <main class="max-w-7xl mx-auto">
+        <div class="card-grid">
+            <!-- Çöp Şiş Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='cop-sis-makinasi.html'">
+                <img src="img/Makinalar/Çöpşiş.jpg" alt="ÇÖP ŞİŞ MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">ÇÖP ŞİŞ MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Et, tavuk ve sebzelerin eşit boyutlarda kesilip şişlenmesi için özel tasarlanmıştır. Yüksek kapasiteli ve hijyenik üretim sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Donut Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='donut-makinasi.html'">
+                <img src="img/Makinalar/donutmakinesi.jpg" alt="DONUT MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">DONUT MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Standart ve özel tasarımlı donut üretimi için ideal. Otomatik şekillendirme ve pişirme sistemi ile verimlilik sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- HAMUR AÇMA MAKİNASI -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='hamur-acma-makinasi.html'">
+                <img src="img/Makinalar/hamuracmamak.jpg" alt="HAMUR AÇMA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">HAMUR AÇMA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Yufka, börek, baklava ve pizza hamuru gibi çeşitli ürünler için ideal. Otomatik kalınlık ayarı ile hassas ve eşit hamur açımı sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Yumurta Kırma Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='yumurta-kirma-makinasi.html'">
+                <img src="img/Makinalar/yumurtakirmamak.jpg" alt="YUMURTA KIRMA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">YUMURTA KIRMA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Endüstriyel yumurta kırma ve ayırma makinası. Hijyenik paslanmaz çelik yapı ile gıda güvenliği sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dürüm Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='durum-makinasi.html'">
+                <img src="img/Makinalar/durummakinesi.jpg" alt="DÜRÜM MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">DÜRÜM MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Lavaş ve dürüm ekmeği üretimi için özel tasarlanmış makina. Eşit kalınlıkta ve boyutta üretim yapar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dolgu Kurabiye Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='dolgu-kurabiye-makinasi.html'">
+                <img src="img/Makinalar/dolgu_kurabiye_makinasi.jpg" alt="DOLGU KURABİYE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">DOLGU KURABİYE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Çikolata, reçel veya krema dolgulu kurabiyeler için otomatik dolum sistemli makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- İçli Köfte Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='icli-kofte-makinasi.html'">
+                <img src="img/Makinalar/icli_kofte_makinesi3.jpg" alt="İÇLİ KÖFTE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">İÇLİ KÖFTE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        İçli köfte üretimini otomatikleştiren makina. Eşit ağırlıkta ve şekilde köfteler üretir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kızartma Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='kizartma-makinasi.html'">
+                <img src="img/Makinalar/kizartmamak.jpg" alt="KIZARTMA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KIZARTMA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Endüstriyel kızartma ünitesi. Otomatik sıcaklık kontrolü ve yağ filtreleme sistemi ile güvenli kızartma.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Manti Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='manti-makinasi.html'">
+                <img src="img/Makinalar/Mantı makinası.jpg" alt="MANTI MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">MANTI MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Otomatik mantı yapma makinası. Hamur açma, iç doldurma ve şekillendirme tek makinede.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Rulo Gofret Hattı -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='rulo-gofret-hatti.html'">
+                <img src="img/Makinalar/Rulo Gofret.jpg" alt="RULO GOFRET HATTI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">RULO GOFRET HATTI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Tam otomatik rulo gofret üretim hattı. Dolgulu veya dolu gofret çeşitleri için uygundur.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Acıbadem Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='acibadem-makinasi.html'">
+                <img src="img/Makinalar/acibadem.jpg" alt="ACIBADEM MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">ACIBADEM MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Badem şeklinde kurabiyelerin seri üretimi için özel tasarlanmış makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- İçi Dolgulu Kurabiye Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='ici-dolgulu-kurabiye-makinasi.html'">
+                <img src="img/Makinalar/içiolgulu.jpg" alt="İÇİ DOLGULU KURABİYE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">İÇİ DOLGULU KURABİYE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Çeşitli dolgular için özel tasarlanmış, hassas dolum yapabilen kurabiye makinası.
+                    </p>
+                </div>
+            </div>
+
+            <!-- İçi Dolgusuz Kurabiye Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='ici-dolgusuz-kurabiye-makinasi.html'">
+                <img src="img/Makinalar/DOLGUSUZ.jpg" alt="İÇİ DOLGUSUZ KURABİYE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">İÇİ DOLGUSUZ KURABİYE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Çeşitli dolgular için özel tasarlanmış, hassas dolum yapabilen kurabiye makinası.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pandispanya Dilimleme Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='pandispanya-dilimleme-makinasi.html'">
+                <img src="img/Makinalar/Pandispanya dilimleme.jpg" alt="PANDİSPANYA DİLİMLEME MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">PANDİSPANYA DİLİMLEME MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Pandispanya ve kekleri eşit kalınlıkta dilimlemek için tasarlanmış hassas makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Renkli Kurabiye Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='renkli-kurabiye-makinasi.html'">
+                <img src="img/Makinalar/renklikurabiye.jpg" alt="RENKLİ KURABİYE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">RENKLİ KURABİYE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Çok renkli hamurlardan kurabiye üretimi yapabilen özel makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sigara Böreği Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='sigara-boregi-makinasi.html'">
+                <img src="img/Makinalar/sigaraboregimak.jpg" alt="SİGARA BÖREĞİ MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">SİGARA BÖREĞİ MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Otomatik sigara böreği sarma makinası. Eşit boyutlarda ve sıkı sarım sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Yaş Pasta Dilimleme Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='yas-pasta-dilimleme-makinasi.html'">
+                <img src="img/Makinalar/yaşpasta.jpg" alt="YAŞ PASTA DİLİMLEME MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">YAŞ PASTA DİLİMLEME MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Kremalı pastaları temiz ve eşit dilimler halinde kesmek için özel tasarım.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kruvasan Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='kruvasan-makinasi.html'">
+                <img src="img/Makinalar/kuruvasann.jpg" alt="KRUVASAN MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KRUVASAN MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Otomatik kruvasan şekillendirme makinası. Standart ve özel boyutlarda üretim yapar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- İki Renkli Kurabiye Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='iki-renkli-kurabiye-makinasi.html'">
+                <img src="img/Makinalar/iki renkli.jpg" alt="İKİ RENKLİ KURABİYE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">İKİ RENKLİ KURABİYE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        İki farklı renkte hamuru aynı anda işleyerek desenli kurabiyeler üretir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Hamur Dolum Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='hamur-dolum-makinasi.html'">
+                <img src="img/Makinalar/hamur dolum mak..jpg" alt="HAMUR DOLUM MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">HAMUR DOLUM MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        İç dolgulu hamur ürünleri için otomatik dolum ve şekillendirme sistemi.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Baklava Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='baklava-makinasi.html'">
+                <img src="img/Makinalar/baklava.jpg" alt="BAKLAVA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">BAKLAVA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Baklava yapımının tüm aşamalarını otomatikleştiren özel üretim hattı.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kızartma Üniteleri -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='kizartma-uniteleri.html'">
+                <img src="img/Makinalar/kızartma makinası.jpg" alt="KIZARTMA ÜNİTELERİ">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KIZARTMA ÜNİTELERİ</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Endüstriyel kızartma ihtiyaçları için farklı kapasitelerde kızartma sistemleri.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Simit Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='simit-makinasi.html'">
+                <img src="img/Makinalar/simit.jpg" alt="SİMİT MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">SİMİT MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Geleneksel simit üretimi için özel tasarlanmış makina. Eşit boyutlarda ve kalitede simit üretir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Antep Yuvalama Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='antep-yuvalama-makinasi.html'">
+                <img src="img/Makinalar/antep yuvalama.jpg" alt="ANTEP YUVALAMA - ANALI KIZLI - EKŞİLİ KÖFTE MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">ANTEP YUVALAMA - ANALI KIZLI - EKŞİLİ KÖFTE MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Geleneksel Antep yemeklerinin otomatik üretimi için özel tasarlanmış makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Fıstık Öğütme Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='fistik-ogutme-makinasi.html'">
+                <img src="img/Makinalar/fıstık öğütme.jpg" alt="FISTIK ÖĞÜTME MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">FISTIK ÖĞÜTME MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Fıstık ve benzeri kuruyemişlerin öğütülmesi için özel tasarlanmış makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kaplama Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='kaplama-makinasi.html'">
+                <img src="img/Makinalar/kaplama.jpg" alt="KAPLAMA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KAPLAMA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Gıda ürünlerinin çeşitli malzemelerle kaplanması için özel tasarlanmış makina.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kuru Pasta Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='kuru-pasta-makinasi.html'">
+                <img src="img/Makinalar/kurupasta.jpg" alt="KURUPASTA MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KURUPASTA MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Kuru pasta üretimi için özel tasarlanmış makina. Eşit boyutlarda üretim yapar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pizza Tost Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='pizza-tost-makinasi.html'">
+                <img src="img/Makinalar/pizza tost.jpg " alt="PİZZA TOST MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">PİZZA TOST MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Pizza ve tost üretimi için özel tasarlanmış makina. Hızlı ve verimli üretim sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Peynir Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='peynir-makinasi.html'">
+                <img src="img/Makinalar/peynir.jpg" alt="PEYNİR MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">PEYNİR MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Peynir üretimi için özel tasarlanmış makina. Hijyenik ve verimli üretim sağlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pankek Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='pankek-makinasi.html'">
+                <img src="img/Makinalar/pankek.jpg" alt="PANKEK MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">PANKEK MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Pankek üretimi için özel tasarlanmış makina. Eşit kalınlıkta ve boyutta üretim yapar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Krep Makinası -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="window.location.href='krep-makinasi.html'">
+                <img src="img/Makinalar/krep.jpg" alt="KREP MAKİNASI">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold text-[#a68e3f]">KREP MAKİNASI</h3>
+                    <p class="text-sm mt-2 text-gray-700">
+                        Krep üretimi için özel tasarlanmış makina. İnce ve eşit kalınlıkta krep üretir.
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+    <!-- Image Modal -->
+<div id="imageModal" class="image-modal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <!-- <div id="modalCaption" class="text-white text-center text-xl mt-4"></div> --> <!-- Bu satırı kaldırın -->
+</div>
+
+    <script>
+    // Modal açma fonksiyonu
+    function openModal(imageSrc, caption) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const captionText = document.getElementById("modalCaption");
+        
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+        // captionText.innerHTML = caption; // Bu satırı kaldırın veya yorum satırı yapın
+        
+        // Sayfa kaydırmayı engelle
+        document.body.style.overflow = "hidden";
+    }
+    
+    // Modal kapatma fonksiyonu
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+        
+        // Sayfa kaydırmayı tekrar aktif et
+        document.body.style.overflow = "auto";
+    }
+    
+    // Modal dışına tıklayarak kapatma
+    window.onclick = function(event) {
+        const modal = document.getElementById("imageModal");
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+    
+    // ESC tuşuyla kapatma
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            closeModal();
+        }
+    });
+</script>
+
+    <!-- Footer -->
+    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] text-white w-full py-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <a href="index.html" class="mb-4 md:mb-0">
+                    <img src="img/anko_logo.png" alt="ANKOMAK" class="h-12 w-auto">
+                </a>
+                <nav class="flex flex-wrap justify-center gap-4 md:gap-8">
+                    <a href="index.html" class="hover:text-gray-200">Ana Sayfa</a>
+                    <a href="kurumsal.html" class="hover:text-gray-200">Kurumsal</a>
+                    <a href="gecmisten-gunumuze-ankomak.html" class="hover:text-gray-200">Geçmişten Günümüze ANKOMAK</a>
+                     <a href="BasındaAnkoMak.html" class="hover:text-gray-200">Basında ANKOMAK</a>
+                    <a href="Makinalarımız.html" class="hover:text-gray-200">Makinalarımız</a>
+                    <a href="iletisim.html" class="hover:text-gray-200">İletişim</a>
+                </nav>
+            </div>
+            <div class="text-center mt-6 text-sm">
+                <p>Telif Hakkı © 2025 ANKO Makina. Tüm Hakları Saklıdır.</p>
+                <p class="mt-1">Gizlilik Politikası | Yasal Uyarı</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
