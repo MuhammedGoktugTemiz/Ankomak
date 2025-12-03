@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Videolarımız</title>
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/banner.css" />
+  <link rel="icon" type="image/avif" href="icon.avif" />
+  <link rel="stylesheet" href="css/mobile.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Banner ve Slider Stilleri */
+    .banner {
+      position: relative;
+      height: 80vh;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .banner-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: -1;
+    }
+
+    .banner-slide.active {
+      opacity: 1;
+    }
+
+    /* Slider Butonları */
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transform: translateY(-50%);
+      z-index: 10;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .slider-arrow {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .slider-arrow:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+      transform: scale(1.1);
+    }
+
+    /* Bölüm Başlıkları */
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .section-title h2 {
+      display: inline-block;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #a08017;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, #a08017, #b08f23, #867439);
+      border-radius: 2px;
+    }
+
+    /* Video Kartları */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .video-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 400px;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-thumbnail {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background-color: #f5f5f5;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .video-thumbnail img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .video-card:hover .video-thumbnail img {
+      transform: scale(1.05);
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background-color: rgba(255, 0, 0, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .video-card:hover .play-button {
+      background-color: rgba(255, 0, 0, 1);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .play-button i {
+      color: white;
+      font-size: 24px;
+      margin-left: 5px;
+    }
+
+    .video-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    .video-duration {
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      z-index: 2;
+    }
+
+    /* Filtre Butonları */
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: linear-gradient(to right, #a08017, #b08f23);
+      color: white;
+    }
+
+    /* Video Modal */
+    #videoModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #videoModal .modal-container {
+      width: 90%;
+      max-width: 1200px;
+      position: relative;
+    }
+
+    #videoModal .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #videoModal iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #closeModal {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    #closeModal:hover {
+      color: #a08017;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .video-card {
+        min-height: 350px;
+      }
+      
+      #videoModal {
+        padding: 10px;
+      }
+      
+      #videoModal .modal-container {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        max-width: 1800px;
+      }
+      
+      .video-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+/* Navbar alt menü stilleri */
+      .navbar ul li {
+        position: relative;
+      }
+
+      .navbar ul li ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        min-width: 200px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .navbar ul li:hover ul {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .navbar ul li ul li {
+        padding: 0;
+      }
+
+      .navbar ul li ul li a {
+        display: block;
+        padding: 10px 20px;
+        color: #333;
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+
+      .navbar ul li ul li a:hover {
+        background: #f5f5f5;
+        color: #a68e3f;
+      }
+
+      /* Mobil Stiller */
+      @media (max-width: 768px) {
+        .navbar ul {
+          display: none;
+        }
+
+        .banner {
+          height: 50vh;
+        }
+
+        .banner-content h1 {
+          font-size: 24px;
+        }
+
+        .banner-content p {
+          font-size: 14px;
+        }
+
+        .photo-gallery {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-content h2 {
+          font-size: 24px;
+        }
+
+        .about-content p {
+          font-size: 14px;
+        }
+
+        .mission-vision-card {
+          padding: 10px;
+        }
+
+        .mission-vision-card h3 {
+          font-size: 18px;
+        }
+
+        .mission-vision-card p {
+          font-size: 14px;
+        }
+
+        .button {
+          padding: 8px 16px;
+          font-size: 14px;
+        }
+
+        .footer-links {
+          flex-direction: column;
+        }
+
+        .footer-links a {
+          margin: 5px 0;
+        }
+
+        .footer-bottom p {
+          font-size: 12px;
+        }
+
+        .navbar ul li ul {
+          position: static;
+          opacity: 1;
+          visibility: visible;
+          box-shadow: none;
+          display: none;
+        }
+
+        .navbar ul li:hover ul {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav id="navbar" class="navbar p-4 z-30">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="index.html" class="flex items-center">
+          <img src="img/anko_logo.png" class="h-12 w-auto" alt="ANKOMAK Logo" />
+        </a>
+        
+        <ul class="hidden md:flex space-x-6 menu1">
+          <li class="transition cursor-pointer font-semibold">
+            <a href="index.html">Ana Sayfa <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="kurumsal.html">Hakkımızda <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          </li>
+          <li class="transition cursor-pointer font-semibold relative group">
+            <a href="#" class="flex items-center active">Basın Ve Medya <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span>
+              <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+              </li>
+              <li>
+                <a href="Videolarımız.html">Video Galeri</a>
+              </li>
+            </ul>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="Makinalarımız.html">Makinelerimiz <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="iletisim.html">İletişim <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          </li>
+        </ul>
+        
+        <button id="menuButton" class="md:hidden text-2xl focus:outline-none" aria-label="Menüyü Aç">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobil Menü -->
+    <div id="mobileMenu" class="mobile-menu p-6 flex flex-col space-y-4 md:hidden z-40 bg-white">
+      <button id="closeMenu" class="self-end text-black text-2xl font-bold focus:outline-none" aria-label="Menüyü Kapat">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div class="flex items-center mb-4">
+        <img src="img/anko_logo.png" class="h-8 w-auto mr-3" alt="ANKOMAK Logo" />
+        <span class="font-bold text-lg text-gray-800">ANKOMAK</span>
+      </div>
+
+      <a class="font-bold text-lg py-2 border-b border-gray-200" href="index.html">Ana Sayfa</a>
+      <a class="font-bold text-lg py-2 border-b border-gray-200" href="kurumsal.html">Hakkımızda</a>
+      <a class="font-bold text-lg py-2 border-b border-gray-200" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze</a>
+
+      <!-- Basın ve Medya açılır menü -->
+      <div class="mobile-submenu">
+        <button 
+          class="font-bold text-lg w-full text-left py-2 focus:outline-none flex items-center justify-between border-b border-gray-200"
+          onclick="toggleMobileDropdown('mediaSubmenu', this)"
+        >
+          <span>Basın ve Medya</span>
+          <span class="arrow text-xl transform transition-transform duration-200">▼</span>
+        </button>
+
+        <div id="mediaSubmenu" class="mt-2 hidden space-y-2 mobile-submenu">
+          <a class="text-base text-gray-700 hover:text-[#a68e3f]" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+          <a class="text-base text-gray-700 hover:text-[#a68e3f]" href="Videolarımız.html">Video Galeri</a>
+        </div>
+      </div>
+
+      <a class="font-bold text-lg py-2 border-b border-gray-200" href="Makinalarımız.html">Makinelerimiz</a>
+      <a class="font-bold text-lg py-2 border-b border-gray-200" href="iletisim.html">İletişim</a>
+    </div>
+
+  <!-- Banner Slider -->
+  <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24" style="justify-content: flex-end; padding-bottom: 10%;">
+    <!-- Banner Slider -->
+    <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN2.jpeg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN3.jpeg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN4.jpeg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/künefe..png');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/içli.png');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/içidolguu.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/yumurta.png');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/tutku.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/mantı.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/mantı1.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/mantı2.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/mantı3.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/simit.jpg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/lavaş.jpeg');"></div>
+    <div class="banner-slide" style="background-image: url('img/arkaplan/kolböreği.jpg');"></div>
+
+    <!-- Slider Navigation Arrows -->
+    <div class="slider-nav">
+      <div class="slider-arrow prev">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+        </svg>
+      </div>
+      <div class="slider-arrow next">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+        </svg>
+      </div>
+    </div>
+    
+  
+  </section>
+
+  <!-- İçerik -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Video Galeri -->
+    <section id="video-galeri" class="py-8">
+      <div class="section-title">
+        <h2>Bütün Makine Videolarımız</h2>
+      </div>
+      
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <p class="text-lg text-gray-700">ANKOMAK'ın sektördeki lider konumunu gösteren tüm videolarımızı buradan izleyebilirsiniz.</p>
+      </div>
+
+      <!-- Filtre Butonları -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Tüm Videolar</button>
+        <button class="filter-btn" data-filter="roportaj">Röportajlar</button>
+        <button class="filter-btn" data-filter="haber">Haberler</button>
+        <button class="filter-btn" data-filter="tanitim">Makine Tanıtımları</button>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="video-grid">
+        <!-- Röportajlar -->
+        <div class="video-card" data-category="roportaj">
+          <div class="video-thumbnail">
+            <img src="img\kurumsal\ITO.png" alt="İstanbul Ticaret Odası Konuşması">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">İstanbul Ticaret Odası Konuşması</h3>
+            <div class="video-meta">
+              <span>Röportaj</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="local-video-src" hidden>video/1007(1).mp4</div>
+        </div>
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+            </div>
+          </div>
+          <div class="video-id" hidden>ENsm8PN9fo0</div>
+        </div>
+        
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-2">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-2</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>lzXlEra6fZs</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-3">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-3</h3>
+            <div class="video-meta">
+              <span>Tanıtım</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>iqgw7bubvuk</div>
+        </div>
+     
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-4">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-4</h3>
+            <div class="video-meta">
+              <span>Tanıtım</span>
+              <span>2021</span>
+            </div>
+          </div>
+          <div class="video-id" hidden>6xVuQuRS-Pk</div>
+        </div>
+
+           <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-5">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-5</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>IW-1NdpqQwY</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-6">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-6</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>0V3UnCY91RE</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Makinesi-7">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Makinesi-7</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>vHTdvHraXlM</div>
+        </div>
+
+         <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/dürüm/1082023111703_7.jpg" alt="Tortilla Lavaş Makinesi-8 (Meksika Tortillası)">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Tortilla Lavaş Makinesi-8 (Meksika Tortillası)</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>tOtZiM5Gq1Q</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/sigaraboregimak.jpg" alt="Börek Hattı-1">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Börek Hattı-1</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>zwkrxoNFwIs</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/sigaraboregimak.jpg" alt="Börek Hattı-2">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Börek Hattı-2</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>RfcavO1uqZU</div>
+        </div>
+
+        <!-- Haberler -->
+        
+
+        <!-- Tanıtım Videoları -->
+        
+
+   
+
+     
+        
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="Mantı Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mantı Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>opAYMWbiQqI</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="Mantı Makinesi-2">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mantı Makinesi-2</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>eBuruQJODjw</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="Mantı Makinesi-3">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mantı Makinesi-3</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>jkteOieY5tQ</div>
+        </div>
+
+         <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="Mantı Makinesi-4">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mantı Makinesi-4</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>UUwgd8qCFlk</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/içliköfte/23052021213627_dolgu_kurabiye_makinasi.jpg" alt="İçli Köfte Makinesi-1">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">İçli Köfte Makinesi-1</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>BpLXAJjNmMs</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/içliköfte/23052021213627_dolgu_kurabiye_makinasi.jpg" alt="İçli Köfte Makinesi-2">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">İçli Köfte Makinesi-2</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>eHfJGSWMHF4?t=1</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/donut/5.jpg" alt="Donut Mayalama Ve Dinlendirme Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Donut Mayalama Ve Dinlendirme Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>0avip2jmpBw</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/donut/2.jpg" alt="Mini Donut Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mini Donut Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>oSA9mv4ocys</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/pastakesme.jpg" alt="Pasta Dilimleme Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Pasta Dilimleme Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>ID_d3s7bRLU</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/baklava.jpg" alt="Baklava Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Baklava Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>CbNiiR1ppr4</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/pizza tost.jpg" alt="Pizza Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Pizza Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>tt_3ZnOdyoQ</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/yaşpasta.jpg" alt="Pasta Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Pasta Makinesi</h3>
+            <div class="video-meta">
+              <span>Pasta Makinesi</span>
+              <span>Makine Tanıtımları</span>
+            </div>
+          </div>
+          <div class="video-id" hidden>gJvbVnJL6_4</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/krep.jpg" alt="Waffle Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Waffle Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>_oGK2kzq6zg</div>
+        </div>
+
+    
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/sigaraboregimak.jpg" alt="Sigara Böreği Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Sigara Böreği Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>GPdtrK7k7Uc</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/yumurtakirmamak.jpg" alt="Yumurta Kırma Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Yumurta Kırma Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>GJm-IAkygEM</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/sigaraboregimak.jpg" alt="Kol Böreği Hattı">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Kol Böreği Hattı</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>MfjlXPiQ9qo</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/1082023110819_2.jpg" alt="Dondurma Külah Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Dondurma Külah Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>HxFI12MXSO8</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/kurupasta.jpg" alt="Muffin Kek Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Muffin Kek Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>MKiX7hzxLQk</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/sigaraboregimak.jpg" alt="Börek Üretim Hattı">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Börek Üretim Hattı</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>QzuHzxCWAuY</div>
+        </div>
+
+        <div class="video-card" data-category="haber">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/w0lUrP4Noms/maxresdefault.jpg" alt="Yunus ULUPINAR - TV PROGRAMI">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Yunus ULUPINAR - TV PROGRAMI</h3>
+            <div class="video-meta">
+              <span>Haber</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>w0lUrP4Noms</div>
+        </div>
+
+        <div class="video-card" data-category="haber">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/j7YSOQ7q8SY/maxresdefault.jpg" alt="YUNUS ULUPINAR - TGRT EU KANALI">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">
+YUNUS ULUPINAR - TGRT EU KANALI</h3>
+            <div class="video-meta">
+              <span>haber</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>j7YSOQ7q8SY</div>
+        </div>
+        <div class="video-card" data-category="roportaj">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/nYL-xoFtJQU/maxresdefault.jpg" alt="ENDÜSTRİ Radyo Röportaj-1">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">ENDÜSTRİ Radyo Röportaj-1</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>nYL-xoFtJQU</div>
+        </div>
+        <div class="video-card" data-category="roportaj">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/CArObgS54ZA/maxresdefault.jpg" alt="ENDÜSTRİ Radyo Röportaj-2">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">ENDÜSTRİ Radyo Röportaj-2</h3>
+            <div class="video-meta">
+              <span>Röportaj</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>CArObgS54ZA</div>
+        </div>
+        <div class="video-card" data-category="roportaj">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/kM-bfrUimWo/maxresdefault.jpg" alt="ENDÜSTRİ Radyo Röportaj-3">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">ENDÜSTRİ Radyo Röportaj-3</h3>
+            <div class="video-meta">
+              <span>Röportaj</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>kM-bfrUimWo</div>
+        </div>
+        <div class="video-card" data-category="haber">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/_NjVGRimsVg/maxresdefault.jpg" alt="YUNUS ULUPINAR - FOOD-TECH EURASIA 2021 FUAR KONUŞMASI">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">YUNUS ULUPINAR - FOOD-TECH EURASIA 2021 FUAR KONUŞMASI</h3>
+            <div class="video-meta">
+              <span>Haber</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>_NjVGRimsVg</div>
+        </div>
+
+
+        
+        <div class="video-card" data-category="haber">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/ucNliqTtBvs/maxresdefault.jpg" alt="YUNUS ULUPINAR ÜLKEM İÇİN YATIRIM YAPACAKLARA PROJELERİM HEP ÜCRETSİZ">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">YUNUS ULUPINAR "ÜLKEM İÇİN YATIRIM YAPACAKLARA PROJELERİM HEP ÜCRETSİZ"</h3>
+            <div class="video-meta">
+              <span>haber</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>ucNliqTtBvs</div>
+        </div>
+        <div class="video-card" data-category="roportaj">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/d4zcNEy0KVw/maxresdefault.jpg" alt="Mertem Gıda Teknolojileri ve Anko Gıda Makineleri Yönetim Kurulu Başkanı Yunus Ulupınar">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mertem Gıda Teknolojileri ve Anko Gıda Makineleri Yönetim Kurulu Başkanı Yunus Ulupınar
+</h3>
+            <div class="video-meta">
+              <span>Röportaj</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>d4zcNEy0KVw</div>
+        </div>
+
+       <div class="video-card" data-category="haber">
+          <div class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/roa8i_-s_oQ/maxresdefault.jpg" alt="YUNUS ULUPINAR-GIDA MAK.-ENDÜSTRİYEL TEKNOLOJİLER-UNLU MAM.MAKİNALARI">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">YUNUS ULUPINAR-GIDA MAK.-ENDÜSTRİYEL TEKNOLOJİLER-UNLU MAM.MAKİNELERİ</h3>
+            <div class="video-meta">
+              <span>Haber</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="video-id" hidden>roa8i_-s_oQ</div>
+        </div>
+
+
+
+
+
+
+
+        <!-- Local MP4 Videos -->
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/donutmakinesi.jpg" alt="Donut Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Donut Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="local-video-src" hidden>video/1.mp4</div>
+        </div>
+
+        <div class="video-card" data-category="tanitim">
+          <div class="video-thumbnail">
+            <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="Mantı Makinesi">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">Mantı Makinesi</h3>
+            <div class="video-meta">
+              <span>Makine Tanıtımları</span>
+              <span></span>
+            </div>
+          </div>
+          <div class="local-video-src" hidden>video/2.mp4</div>
+        </div>
+
+        
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Video Modal -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 p-4">
+    <div class="relative w-full max-w-6xl">
+      <button id="closeModal" class="absolute -top-12 right-0 text-white text-3xl hover:text-yellow-400 transition z-50">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="relative pt-[56.25%]"> <!-- 16:9 aspect ratio -->
+        <iframe id="ytPlayer" class="absolute top-0 left-0 w-full h-full" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen></iframe>
+        <video id="localPlayer" class="absolute top-0 left-0 w-full h-full" controls style="display: none;">
+          <source src="" type="video/mp4">
+          Tarayıcınız video etiketini desteklemiyor.
+        </video>
+      </div>
+    </div>
+  </div>
+
+ <!-- Footer -->
+    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] py-6 w-full">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0">
+    
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/anko_logo.png" alt="ANKOMAK" class="h-6 w-auto" />
+    </a>
+
+    <!-- Linkler -->
+    <nav class="footer-links flex flex-col md:flex-row md:space-x-8 text-white text-sm font-medium items-center md:items-start">
+
+      <a href="index.html" class="mb-1 hover:text-gray-200 transition">Ana Sayfa</a>
+      <a href="kurumsal.html" class="mb-1 hover:text-gray-200 transition">Hakkımızda</a>
+      <a href="gecmisten-gunumuze-ankomak.html" class="mb-1 hover:text-gray-200 transition">Geçmişten Günümüze ANKOMAK</a>
+
+      <!-- Basın ve Medya hover menü -->
+      <div class="relative group mb-1">
+  <span class="font-bold cursor-pointer text-center block hover:text-gray-200 transition">
+    Basın ve Medya
+  </span>
+  <div class="absolute left-0 top-full hidden group-hover:block bg-[#b08f23] text-white text-sm py-2 px-4 rounded-b shadow-lg space-y-2 z-10 min-w-[180px]">
+    <a href="BasındaAnkoMak.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+      Basında ANKOMAK
+    </a>
+    <a href="Videolarımız.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+      Video Galeri
+    </a>
+  </div>
+</div>
+
+      <a href="Makinalarımız.html" class="mb-1 hover:text-gray-200 transition">Makinelerimiz</a>
+      <a href="iletisim.html" class="hover:text-gray-200 transition">İletişim</a>
+    </nav>
+  </div>
+
+  <!-- Alt Kısım -->
+  <div class="footer-bottom text-center mt-6 text-white text-xs">
+    <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
+    <p class="mt-1">
+      <a href="#" class="hover:underline">Gizlilik Politikası</a> | <a href="#" class="hover:underline">Yasal Uyarı</a>
+    </p>
+  </div>
+</footer>
+
+
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script>
+      // Lightbox ayarları
+      lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'alwaysShowNavOnTouchDevices': true,
+        'disableScrolling': true,
+        'fadeDuration': 300,
+        'imageFadeDuration': 300,
+        'showImageNumberLabel': false,
+        'enableKeyboardNav': true
+      });
+
+      // Lightbox açıldığında kapatma butonunu güçlendir
+      document.addEventListener('DOMContentLoaded', function() {
+        // Lightbox açıldığında kapatma butonunu kontrol et
+        document.addEventListener('click', function(e) {
+          if (e.target.classList.contains('lb-close') || e.target.closest('.lb-close')) {
+            lightbox.end();
+          }
+        });
+
+        // ESC tuşu ile kapatma
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && document.querySelector('.lb-outerContainer')) {
+            lightbox.end();
+          }
+        });
+      });
+    </script>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+    const menuButton = document.getElementById("menuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMenu = document.getElementById("closeMenu");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    // Mobile menu toggle
+    menuButton.addEventListener("click", () => {
+      mobileMenu.classList.add("open");
+    });
+
+    closeMenu.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!mobileMenu.contains(event.target) && event.target !== menuButton) {
+        mobileMenu.classList.remove("open");
+      }
+    });
+
+    // Slider Script
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelectorAll('.banner-slide');
+      const prevArrow = document.querySelector('.slider-arrow.prev');
+      const nextArrow = document.querySelector('.slider-arrow.next');
+      let currentSlide = 0;
+      const slideInterval = 5000;
+      let slideTimer;
+
+      function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (n + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }
+
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+
+      function prevSlide() {
+        goToSlide(currentSlide - 1);
+      }
+
+      function startSlider() {
+        slideTimer = setInterval(nextSlide, slideInterval);
+      }
+
+      // İlk slaytı aktif et
+      slides[0].classList.add('active');
+      
+      // Slider'ı başlat
+      startSlider();
+
+      // Ok butonları eventleri
+      nextArrow.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        nextSlide();
+        startSlider();
+      });
+
+      prevArrow.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        prevSlide();
+        startSlider();
+      });
+
+      // Banner'a hover olunca slider'ı durdur
+      const banner = document.querySelector('.banner');
+      banner.addEventListener('mouseenter', () => {
+        clearInterval(slideTimer);
+      });
+
+      banner.addEventListener('mouseleave', () => {
+        startSlider();
+      });
+    });
+
+    // Video Modal Script
+    document.addEventListener('DOMContentLoaded', function() {
+      const videoCards = document.querySelectorAll('.video-card');
+      const videoModal = document.getElementById('videoModal');
+      const ytPlayer = document.getElementById('ytPlayer');
+      const localPlayer = document.getElementById('localPlayer');
+      const closeModal = document.getElementById('closeModal');
+      
+      videoCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Filtre butonlarına tıklamayı engelle
+          if (e.target.classList.contains('filter-btn')) return;
+          
+          const videoId = this.querySelector('.video-id');
+          const localVideoSrc = this.querySelector('.local-video-src');
+          
+          // YouTube video kontrolü
+          if (videoId && videoId.textContent) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId.textContent}?autoplay=1&rel=0&modestbranding=1&showinfo=0`;
+            
+            // YouTube player'ı göster, local player'ı gizle
+            ytPlayer.src = embedUrl;
+            ytPlayer.style.display = 'block';
+            localPlayer.style.display = 'none';
+            localPlayer.pause();
+          }
+          
+          // Local video kontrolü
+          if (localVideoSrc && localVideoSrc.textContent) {
+            const videoSource = localVideoSrc.textContent;
+            
+            // Local player'ı göster, YouTube player'ı gizle
+            localPlayer.querySelector('source').src = videoSource;
+            localPlayer.load();
+            localPlayer.style.display = 'block';
+            ytPlayer.style.display = 'none';
+            ytPlayer.src = '';
+          }
+          
+          // Modalı göster
+          videoModal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+          
+          // Ekran boyutuna göre yeniden ayarla
+          setTimeout(() => {
+            adjustModalSize();
+          }, 100);
+        });
+      });
+      
+      // Modalı kapat
+      closeModal.addEventListener('click', function() {
+        ytPlayer.src = '';
+        localPlayer.pause();
+        localPlayer.currentTime = 0;
+        videoModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Dışarı tıklayarak kapat
+      videoModal.addEventListener('click', function(e) {
+        if (e.target === videoModal) {
+          ytPlayer.src = '';
+          localPlayer.pause();
+          localPlayer.currentTime = 0;
+          videoModal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // ESC tuşu ile kapat
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && videoModal.style.display === 'flex') {
+          ytPlayer.src = '';
+          localPlayer.pause();
+          localPlayer.currentTime = 0;
+          videoModal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // Pencere boyutu değiştiğinde ayarlamaları yap
+      window.addEventListener('resize', adjustModalSize);
+      
+      function adjustModalSize() {
+        const windowHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        const modal = document.querySelector('#videoModal .modal-container');
+        
+        if (windowWidth > 1200) {
+          modal.style.width = '1200px';
+          modal.style.height = (1200 * 9 / 16) + 'px';
+        } else {
+          modal.style.width = '90vw';
+          modal.style.height = (windowWidth * 0.9 * 9 / 16) + 'px';
+        }
+        
+        // Mobilde tam ekran yap
+        if (windowWidth < 768) {
+          modal.style.width = '100vw';
+          modal.style.height = (windowWidth * 9 / 16) + 'px';
+        }
+      }
+    });
+
+    // Filtreleme Scripti
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Active class'ını güncelle
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          const filter = this.getAttribute('data-filter');
+          const videoCards = document.querySelectorAll('.video-card');
+          
+          videoCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+
+    // Mobil dropdown fonksiyonu
+    function toggleMobileDropdown(id, btn) {
+      const submenu = document.getElementById(id);
+      const arrow = btn.querySelector(".arrow");
+      submenu.classList.toggle('hidden');
+      arrow.classList.toggle('rotate-180');
+    }
+  </script>
+  <script src="mobile.js"></script>
+</body>
+</html>

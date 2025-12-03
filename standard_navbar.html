@@ -1,0 +1,76 @@
+    <nav id="navbar" class="navbar p-4 z-30">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="index.html" class="flex items-center">
+          <img src="img/anko_logo.png" class="h-12 w-auto" alt="ANKOMAK Logo" />
+        </a>
+        
+        <ul class="hidden md:flex space-x-6 menu1">
+          <li class="transition cursor-pointer font-semibold">
+            <a href="index.html" class="active">Ana Sayfa</a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="kurumsal.html">Hakkımızda</a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze</a>
+          </li>
+          <li class="transition cursor-pointer font-semibold relative group">
+            <a href="#" class="flex items-center">Basın Ve Medya
+              <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+              </li>
+              <li>
+                <a href="Videolarımız.html">Video Galeri</a>
+              </li>
+            </ul>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="Makinalarımız.html">Makinelerimiz</a>
+          </li>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="iletisim.html">İletişim</a>
+          </li>
+        </ul>
+        
+        <button id="menuButton" class="md:hidden text-2xl focus:outline-none" aria-label="Menüyü Aç">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobil Menü -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <div class="flex items-center">
+          <img src="img/anko_logo.png" class="h-10 w-auto" alt="ANKOMAK Logo" />
+          <span class="ml-3 font-bold text-lg text-gray-800">ANKOMAK</span>
+        </div>
+        <button id="closeMenu" class="mobile-menu-close" aria-label="Menüyü Kapat">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <nav class="mobile-menu-nav">
+        <a href="index.html" class="mobile-menu-link">Ana Sayfa</a>
+        <a href="kurumsal.html" class="mobile-menu-link">Hakkımızda</a>
+        <a href="gecmisten-gunumuze-ankomak.html" class="mobile-menu-link">Geçmişten Günümüze</a>
+        
+        <div class="mobile-submenu">
+          <div class="mobile-submenu-title">Basın Ve Medya</div>
+          <a href="BasındaAnkoMak.html" class="mobile-submenu-link">Basında ANKOMAK</a>
+          <a href="Videolarımız.html" class="mobile-submenu-link">Video Galeri</a>
+        </div>
+        
+        <a href="Makinalarımız.html" class="mobile-menu-link">Makinelerimiz</a>
+        <a href="iletisim.html" class="mobile-menu-link">İletişim</a>
+      </nav>
+    </div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
@@ -8,975 +8,910 @@
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/banner.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
     <link rel="icon" type="image/avif" href="icon.avif" />
     <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-  .highlight-box {
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-    border-left: 5px solid #a68e3f;
-  }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <style>
+      /* Banner ve Slider Stilleri */
+      .banner {
+        position: relative;
+        height: 70vh;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        background-color: #333;
+      }
 
-  .image-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    overflow: auto;
-  }
+      .banner-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
 
-  .modal-content {
-    margin: auto;
-    display: block;
-    width: auto;
-    max-width: 90vw;
-    max-height: 80vh;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    object-fit: contain;
-  }
+      .banner-slide.active {
+        opacity: 1;
+      }
 
-  .close-modal {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+      .banner-content {
+        position: relative;
+        z-index: 5;
+        text-align: center;
+        max-width: 900px;
+        padding: 0 20px;
+      }
 
-  /* Güncellenmiş Kart Stilleri */
-  .image-card {
-    transition: all 0.3s ease;
-    cursor: pointer;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: #a68e3f;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgb(255, 255, 255);
-  }
+      .banner-content h1 {
+        font-size: 3.5rem;
+        font-weight: bold;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+        margin-bottom: 20px;
+        animation: fadeInUp 1s ease-out;
+      }
 
-  .image-container {
-    width: 100%;
-    height: 320px; /* Dikey fotoğraflar için artırılmış yükseklik */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
-    overflow: hidden;
-  }
+      .banner-content p {
+        font-size: 1.3rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        margin-bottom: 30px;
+        animation: fadeInUp 1.2s ease-out;
+      }
 
-  .image-container img {
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-  }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-  .image-card:hover .image-container img {
-    transform: scale(1.03);
-  }
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 0 20px;
+        pointer-events: none;
+      }
 
-  .card-content {
-    padding: 1.25rem;
-    flex-grow: 1;
-  }
+      .slider-arrow {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        pointer-events: auto;
+      }
 
-  .card-content h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #000000;
-    margin-bottom: 0.25rem;
-  }
+      .slider-arrow:hover {
+        background-color: rgba(255, 255, 255, 0.6);
+        transform: scale(1.1);
+      }
 
-  .card-content p {
-    color: #ffffff;
-    font-size: 0.875rem;
-  }
+      .slider-arrow svg {
+        width: 28px;
+        height: 28px;
+        fill: #fff;
+      }
 
-  /* Slider Stilleri */
-  .banner-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    z-index: -1;
-  }
+      .slider-dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        z-index: 10;
+      }
 
-  .banner-slide.active {
-    opacity: 1;
-  }
+      .slider-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-  .slider-nav {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transform: translateY(-50%);
-  z-index: 10;
-  padding: 0 20px;
-  pointer-events: none; /* Butonların üzerine tıklanabilmesi için */
-}
+      .slider-dot.active {
+        background-color: white;
+        transform: scale(1.3);
+      }
 
-.slider-arrow {
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  pointer-events: auto; /* Slider-nav'da devre dışı bırakılan pointer events'i geri verir */
-}
+      .slider-dot:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
 
-.slider-arrow:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-  transform: scale(1.05);
-}
+      /* Karşılaştırma Bölümü */
+      .comparison-section {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 80px 20px;
+        margin: 60px 0;
+      }
 
-.slider-arrow svg {
-  width: 24px;
-  height: 24px;
-  fill: #333;
-}
+      .comparison-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-.slider-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  z-index: 10;
-}
+      .comparison-title {
+        text-align: center;
+        font-size: 3rem;
+        color: #a68e3f;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
 
-.slider-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+      .comparison-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 60px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.8;
+      }
 
-.slider-dot.active {
-  background-color: white;
-  transform: scale(1.2);
-}
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
 
-.slider-dot:hover:not(.active) {
-  background-color: rgba(255, 255, 255, 0.7);
-}
+      .comparison-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
 
-  .banner {
-    position: relative;
-    height: 80vh;
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-    overflow: hidden;
-    background-color: #333;
-  }
+      .comparison-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      }
 
-  .banner-content {
-    position: relative;
-    z-index: 5;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
+      .comparison-image {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.5s ease;
+      }
 
-  .banner-content h1 {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-  }
+      .comparison-card:hover .comparison-image {
+        transform: scale(1.05);
+      }
 
-  .banner-content p {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    margin-bottom: 30px;
-  }
+      .comparison-caption {
+        padding: 20px;
+        background: linear-gradient(135deg, #a68e3f 0%, #8a7634 100%);
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
 
-  .button {
-    display: inline-block;
-    padding: 12px 24px;
-    margin-right: 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.3s;
-  }
+      .dedication-text {
+        text-align: center;
+        font-size: 1.5rem;
+        color: #333;
+        font-style: italic;
+        margin-top: 60px;
+        padding: 30px;
+        background: rgba(166, 142, 63, 0.1);
+        border-left: 6px solid #a68e3f;
+        border-radius: 8px;
+        line-height: 2;
+      }
 
-  .button.primary {
-    background-color: #a68e3f;
-    color: white;
-  }
+      /* İçerik Bölümleri */
+      .content-section {
+        max-width: 1200px;
+        margin: 80px auto;
+        padding: 0 20px;
+      }
 
-  .button {
-    background-color: white;
-    color: #333;
-  }
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
 
-  .button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
+      .section-header h2 {
+        font-size: 2.5rem;
+        color: #a68e3f;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
 
-  .button span {
-    margin-left: 5px;
-    transition: margin-left 0.3s;
-  }
+      .section-header p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+      }
 
-  .button:hover span {
-    margin-left: 10px;
-  }
-  
-  /* Yeni Eklenen Karşılaştırmalı Fotoğraf Stilleri (Banner Altı) */
-  .timeline-comparison {
-    width: 100%;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    position: relative;
-  }
-  
-  .comparison-title {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #a68e3f;
-    margin-bottom: 30px;
-    font-weight: bold;
-  }
-  
-  .comparison-subtitle {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 40px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .comparison-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    background: rgba(255,255,255,0.9);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  }
-  
-  .comparison-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .comparison-item {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-  
-  .comparison-image {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .comparison-item:hover .comparison-image {
-    transform: scale(1.05);
-  }
-  
-  .comparison-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(166, 142, 63, 0.9);
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-  
-  .comparison-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
-  }
-  
-  .divider-line {
-    height: 2px;
-    background: #a68e3f;
-    flex-grow: 1;
-    max-width: 100px;
-  }
-  
-  .divider-icon {
-    margin: 0 20px;
-    color: #a68e3f;
-    font-size: 2rem;
-  }
-  
-  .dedication-text {
-    text-align: center;
-    font-size: 1.3rem;
-    color: #333;
-    font-style: italic;
-    margin-top: 30px;
-    padding: 20px;
-    background: rgba(166, 142, 63, 0.1);
-    border-left: 4px solid #a68e3f;
-  }
-  
-  @media (max-width: 768px) {
-    .comparison-row {
-      flex-direction: column;
-    }
-    
-    .comparison-item {
-      min-width: 100%;
-    }
-  }
-</style>
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .photo-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .photo-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .photo-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+      }
+
+      .photo-card-content {
+        padding: 20px;
+        background: linear-gradient(135deg, #a68e3f 0%, #8a7634 100%);
+      }
+
+      .photo-card-content h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 5px;
+      }
+
+      .photo-card-content p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Submenu text color fix */
+      .dropdown-menu li a,
+      .footer .footer-links .group .group-hover\:block a {
+        color: #000000 !important;
+      }
+      
+      .dropdown-menu li a:hover {
+        color: #ffffff !important;
+      }
+
+      /* Mobil Responsive */
+      @media (max-width: 768px) {
+        .banner {
+          height: 60vh;
+        }
+
+        .banner-content h1 {
+          font-size: 2rem;
+        }
+
+        .banner-content p {
+          font-size: 1rem;
+        }
+
+        .comparison-title {
+          font-size: 2rem;
+        }
+
+        .comparison-subtitle {
+          font-size: 1rem;
+        }
+
+        .section-header h2 {
+          font-size: 1.8rem;
+        }
+
+        .photo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dedication-text {
+          font-size: 1.2rem;
+          padding: 20px;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar -->
     <nav id="navbar" class="navbar p-4 z-30">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a href="index.html">
-          <img src="img\anko_logo.png" class="h-12 w-auto" />
+        <a href="index.html" class="flex items-center">
+          <img src="img/anko_logo.png" class="h-12 w-auto" alt="ANKOMAK Logo" />
         </a>
         
-        <ul class="hidden md:flex space-x-8 menu1">
-          <li class="transition cursor-pointer font-bold">
-            <a href="index.html"
-              >Ana Sayfa <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+        <ul class="hidden md:flex space-x-6 menu1">
+          <li class="transition cursor-pointer font-semibold">
+            <a href="index.html">Ana Sayfa <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="kurumsal.html"
-              >Hakkımızda <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="kurumsal.html">Hakkımızda <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="gecmisten-gunumuze-ankomak.html"
-              >Geçmişten Günümüze ANKOMAK <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="gecmisten-gunumuze-ankomak.html" class="active">Geçmişten Günümüze <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="BasındaAnkoMak.html"
-              >Basında ANKOMAK <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+          <li class="transition cursor-pointer font-semibold relative group">
+            <a href="#" class="flex items-center">Basın Ve Medya <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span>
+              <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+              </li>
+              <li>
+                <a href="Videolarımız.html">Video Galeri</a>
+              </li>
+            </ul>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="Makinalarımız.html"
-              >Makinalarımız <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="Makinalarımız.html">Makinelerimiz <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="iletisim.html"
-              >İletişim <span class="left-border"></span
-              ><span class="right-border"></span
-              ><span class="bottom-border"></span
-            ></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="iletisim.html">İletişim <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
         </ul>
-        <button id="menuButton" class="md:hidden text-2xl">☰</button>
+        
+        <button id="menuButton" class="md:hidden text-2xl focus:outline-none" aria-label="Menüyü Aç">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </nav>
 
     <!-- Mobil Menü -->
-    <div
-      id="mobileMenu"
-      class="mobile-menu p-6 flex flex-col space-y-6 md:hidden hidden"
-    >
-      <button id="closeMenu" class="self-end text-black text-2xl font-bold">
-        X
-      </button>
-      <a class="font-bold" href="index.html">Ana Sayfa</a>
-      <a class="font-bold" href="kurumsal.html">Hakkımızda</a>
-      <a class="font-bold" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
-      <a class="font-bold" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
-      <a class="font-bold" href="Makinalarımız.html">Makinalarımız</a>
-      <a class="font-bold" href="iletisim.html">İletişim</a>
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="flex justify-between items-center mb-8">
+        <img src="img/anko_logo.png" class="h-10 w-auto" alt="ANKOMAK Logo" />
+        <button id="closeMenu" class="text-2xl focus:outline-none" aria-label="Menüyü Kapat">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <nav class="flex flex-col space-y-6">
+        <a href="index.html" class="text-xl font-semibold py-2">Ana Sayfa</a>
+        <a href="kurumsal.html" class="text-xl font-semibold py-2">Hakkımızda</a>
+        <a href="gecmisten-gunumuze-ankomak.html" class="text-xl font-semibold py-2">Geçmişten Günümüze</a>
+        
+        <div class="mobile-submenu">
+          <div class="text-xl font-semibold py-2 text-gray-600">Basın Ve Medya</div>
+          <a href="BasındaAnkoMak.html" class="block py-1 ml-4">Basında ANKOMAK</a>
+          <a href="Videolarımız.html" class="block py-1 ml-4">Video Galeri</a>
+        </div>
+        
+        <a href="Makinalarımız.html" class="text-xl font-semibold py-2">Makinelerimiz</a>
+        <a href="iletisim.html" class="text-xl font-semibold py-2">İletişim</a>
+      </nav>
     </div>
 
     <!-- Banner Section with Slider -->
-    <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24">
-      <!-- Banner Slider -->
+    <section class="banner">
+      <!-- Banner Slides -->
       <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
-      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN2.jpeg');"></div>
-      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN3.jpeg');"></div>
-      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN4.jpeg');"></div>
-      <div class="banner-slide" style="background-image: url('img/arkaplan/hamur1.jpg');"></div>
-      
-     <!-- Slider Navigation Arrows -->
-<div class="slider-nav">
-  <div class="slider-arrow prev left-4">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
-    </svg>
-  </div>
-  <div class="slider-arrow next right-4">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-    </svg>
-  </div>
-</div>
-      
-      <!-- Slider Dots -->
-<div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-  <div class="slider-dot active w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="0"></div>
-  <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="1"></div>
-  <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="2"></div>
-  <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="3"></div>
-  <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="4"></div>
-</div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN2.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN3.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/KAYAN4.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/künefe..png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/içli.png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/içidolguu.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/yumurta.png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/tutku.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı1.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı2.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı3.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/simit.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/lavaş.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/kolböreği.jpg');"></div>
       
       <!-- Banner Content -->
-      <div class="banner-content">
-        <h1 class="text-4xl md:text-5xl font-bold">
-          GEÇMİŞTEN GÜNÜMÜZE ANKOMAK <br />
-          <br>
-          <span class="font-extrabold">30 Yıllık Tecrübe ve Başarı</span>
-        </h1>
-        <p class="mt-4 text-lg md:text-xl max-w-lg">
-          Kurucumuz Yunus Ulupnar'ın vizyonuyla başlayan yolculuğumuz, bugün sektörün öncü markalarından biri olarak devam ediyor.
-        </p>
-        <div class="mt-6">
-          <a href="#kurulus" class="button primary">Kuruluş Hikayemiz </a>
-          <a href="#bugun" class="button primary">Bugün ANKOMAK </a>
+      
+
+      <!-- Slider Navigation -->
+      <div class="slider-nav">
+        <div class="slider-arrow prev">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+          </svg>
         </div>
+        <div class="slider-arrow next">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Slider Dots -->
+      <div class="slider-dots">
+        <div class="slider-dot active" data-index="0"></div>
+        <div class="slider-dot" data-index="1"></div>
+        <div class="slider-dot" data-index="2"></div>
+        <div class="slider-dot" data-index="3"></div>
+        <div class="slider-dot" data-index="4"></div>
+        <div class="slider-dot" data-index="5"></div>
+        <div class="slider-dot" data-index="6"></div>
+        <div class="slider-dot" data-index="7"></div>
+        <div class="slider-dot" data-index="8"></div>
+        <div class="slider-dot" data-index="9"></div>
+        <div class="slider-dot" data-index="10"></div>
+        <div class="slider-dot" data-index="11"></div>
+        <div class="slider-dot" data-index="12"></div>
+        <div class="slider-dot" data-index="13"></div>
+        <div class="slider-dot" data-index="14"></div>
+        <div class="slider-dot" data-index="15"></div>
+        <div class="slider-dot" data-index="16"></div>
+
       </div>
     </section>
 
-    <!-- Karşılaştırmalı Fotoğraf Bölümü (Banner Altı) -->
-    <section class="timeline-comparison">
-  <h2 class="comparison-title">Bir Ömür Adanmışlık</h2>
-  <p class="comparison-subtitle">1996'dan bugüne ANKOMAK'ın yolculuğu - Aynı tutku, aynı kararlılık, sürekli büyüyen bir başarı hikayesi</p>
-  
-  <div class="comparison-wrapper">
-    <div class="comparison-row">
-      <div class="comparison-item">
-        <img src="img/eski/111.jpg" alt="1996 - Kuruluş Yılları" class="comparison-image" onclick="openLightbox(this)">
-        <div class="comparison-caption">1996 - Kuruluş Yılları</div>
+    <!-- Karşılaştırma Bölümü -->
+    <section class="comparison-section">
+      <div class="comparison-container">
+        <h2 class="comparison-title">Bir Ömür Adanmışlık</h2>
+        <p class="comparison-subtitle">
+          1996'dan bugüne ANKOMAK'ın yolculuğu - Aynı tutku, aynı kararlılık, sürekli büyüyen bir başarı hikayesi
+        </p>
+        
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <a href="img/eski/111.jpg" data-lightbox="comparison" data-title="1996 - Kuruluş Yılları">
+              <img src="img/eski/111.jpg" alt="1996 - Kuruluş Yılları" class="comparison-image">
+            </a>
+            <div class="comparison-caption">1996 - Kuruluş Yılları</div>
+          </div>
+          
+          <div class="comparison-card">
+            <a href="img/eski/11.jpeg" data-lightbox="comparison" data-title="2025 - Bugün">
+              <img src="img/eski/11.jpeg" alt="2025 - Bugün" class="comparison-image">
+            </a>
+            <div class="comparison-caption">2025 - Bugün</div>
+          </div>
+        </div>
+        
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <a href="img/yunus bey nostaji/Scan0021.jpg" data-lightbox="comparison" data-title="İlk Fuardan Kareler">
+              <img src="img/yunus bey nostaji/Scan0021.jpg" alt="İlk Fuardan Kareler" class="comparison-image">
+            </a>
+            <div class="comparison-caption">İlk Fuardan Kareler</div>
+          </div>
+          
+          <div class="comparison-card">
+            <a href="img/YENİ FUAR/3.jpeg" data-lightbox="comparison" data-title="Günümüzde Fuarlar">
+              <img src="img/YENİ FUAR/3.jpeg" alt="Günümüzde Fuarlar" class="comparison-image">
+            </a>
+            <div class="comparison-caption">Günümüzde Fuarlar</div>
+          </div>
+        </div>
+        
+        <p class="dedication-text">
+          "Beyazlanmış saçlar, geçen yıllar ve verilen emekler... Hepsi bu sektöre adanmış bir ömrün ve büyük bir tutkunun hikayesini anlatıyor."
+        </p>
       </div>
-      
-      <div class="comparison-item">
-        <img src="img/eski/11.jpeg" alt="2025 - Bugün" class="comparison-image" onclick="openLightbox(this)">
-        <div class="comparison-caption">2025 - Bugün</div>
-      </div>
-    </div>
-    
-    <div class="comparison-divider">
-      <div class="divider-line"></div>
-      <div class="divider-icon">➤</div>
-      <div class="divider-line"></div>
-    </div>
-    
-    <div class="comparison-row">
-      <div class="comparison-item">
-        <img src="img/yunus bey nostaji/Scan0021.jpg" alt="İlk Atölye" class="comparison-image" onclick="openLightbox(this)">
-        <div class="comparison-caption">İlk Fuardan Kareler</div>
-      </div>
-      
-      <div class="comparison-item">
-        <img src="img/YENİ FUAR/3.jpeg" alt="Modern Tesisler" class="comparison-image" onclick="openLightbox(this)">
-        <div class="comparison-caption">Günümüzde Fuarlar</div>
-      </div>
-    </div>
-  </div>
-  
-  <p class="dedication-text">
-    "Beyazlanmış saçlar, geçen yıllar ve verilen emekler... Hepsi bu sektöre adanmış bir ömrün ve büyük bir tutkunun hikayesini anlatıyor."
-  </p>
-
-  <!-- Lightbox Modal -->
-  <div id="lightbox-modal" class="modal" onclick="closeLightbox()">
-    <span class="close-btn" onclick="event.stopPropagation(); closeLightbox()">&times;</span>
-    <img class="modal-content" id="modal-image">
-    <div id="caption"></div>
-  </div>
-</section>
-
-<style>
-  /* Lightbox Modal Stilleri */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    text-align: center;
-    cursor: pointer;
-    opacity: 1; /* Direkt görünürlük için */
-  }
-
-  .modal-content {
-    margin: auto;
-    display: block;
-    max-height: 90vh;
-    max-width: 90vw;
-    margin-top: 5vh;
-    /* Animasyon kaldırıldı - direkt görünsün */
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-    z-index: 1001;
-  }
-
-  .close-btn:hover {
-    color: #bbb;
-    transform: rotate(90deg);
-  }
-
-  #caption {
-    margin: auto;
-    display: block;
-    width: 80%;
-    text-align: center;
-    color: #ccc;
-    padding: 10px 0;
-    font-size: 1.2em;
-  }
-
-  /* Mevcut stilleriniz */
-  .comparison-image {
-    cursor: pointer;
-    transition: none; /* Hover efekti kaldırıldı */
-  }
-
-  /* Sayfa yüklendiğinde direkt görünsün */
-  body {
-    animation: none !important;
-  }
-</style>
-
-<script>
-  function openLightbox(element) {
-    event.stopPropagation();
-    const modal = document.getElementById('lightbox-modal');
-    const modalImg = document.getElementById('modal-image');
-    const captionText = document.getElementById('caption');
-    
-    modal.style.display = "block";
-    modalImg.src = element.src;
-    captionText.innerHTML = element.alt;
-    
-    // Klavyeden ESC tuşuyla kapatma
-    document.addEventListener('keydown', function(event) {
-      if (event.key === "Escape") {
-        closeLightbox();
-      }
-    });
-  }
-
-  function closeLightbox() {
-    document.getElementById('lightbox-modal').style.display = "none";
-  }
-
-  // Sayfa yüklendiğinde direkt göster
-  document.addEventListener('DOMContentLoaded', function() {
-    // Eğer başka bir yükleme animasyonu varsa burada devre dışı bırakılabilir
-  });
-</script>
-
+    </section>
 
     <!-- Kuruluş Bölümü -->
-    <section id="kurulus" class="py-16 px-6 max-w-6xl mx-auto">
-      <div class="highlight-box">
-        <h2 class="text-4xl font-bold text-[#a68e3f] mb-6">Kuruluş</h2>
-        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
-          ANKOMAK, 1996 yılında Ankara'da küçük bir atölyede kurularak gıda makineleri üretimine başladı. Kurucumuz Yunus Ulupnar'ın vizyonu ve liderliğiyle sektöre adım atan firmamız, o günden bugüne sürekli büyüyerek sektörün öncü markalarından biri haline geldi.
-          <br><br>
-          Başlangıçta sadece birkaç makine modeliyle yola çıkan ANKOMAK, müşteri memnuniyeti odaklı yaklaşımı ve kaliteli üretim anlayışı sayesinde kısa sürede sektörde tanınan bir marka oldu. Yunus Bey'in öncülüğünde geliştirilen yenilikçi üretim teknikleri, firmamızı rakiplerinden ayıran en önemli özelliklerden biri haline geldi.
+    <section class="content-section">
+      <div class="section-header">
+        <h2>Kuruluş</h2>
+        <p>
+          ANKOMAK, 1996 yılında Ankara'da küçük bir atölyede kurularak gıda makineleri üretimine başladı. 
+          Kurucumuz Yunus Ulupnar'ın vizyonu ve liderliğiyle sektöre adım atan firmamız, o günden bugüne 
+          sürekli büyüyerek sektörün öncü markalarından biri haline geldi. Başlangıçta sadece birkaç makine 
+          modeliyle yola çıkan ANKOMAK, müşteri memnuniyeti odaklı yaklaşımı ve kaliteli üretim anlayışı 
+          sayesinde kısa sürede sektörde tanınan bir marka oldu.
         </p>
       </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="image-card">
-          <div class="image-container">
+      
+      <div class="photo-grid">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0011.jpg" data-lightbox="kurulus" data-title="Kuruluş Dönemi - 1996 yılında küçük atölyemiz">
             <img src="img/yunus bey nostaji/Scan0011.jpg" alt="Kuruluş Dönemi">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">Kuruluş Dönemi</h3>
-            <p class="text-gray-600">1996 yılında küçük atölyemiz</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>Kuruluş Dönemi</h3>
+            <p>1996 yılında küçük atölyemiz</p>
           </div>
         </div>
         
-        <div class="image-card">
-          <div class="image-container">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0012.jpg" data-lightbox="kurulus" data-title="İlk Makineler">
             <img src="img/yunus bey nostaji/Scan0012.jpg" alt="İlk Makineler">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">İlk Makineler</h3>
-            <p class="text-gray-600">Üretilen ilk makinelerimiz</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>İlk Makineler</h3>
+            <p>Üretilen ilk makinelerimiz</p>
           </div>
         </div>
         
-        <div class="image-card">
-          <div class="image-container">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0021.jpg" data-lightbox="kurulus" data-title="Atölye Çalışmaları">
             <img src="img/yunus bey nostaji/Scan0021.jpg" alt="Atölye Çalışmaları">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">Atölye Çalışmaları</h3>
-            <p class="text-gray-600">Erken dönem üretim süreçleri</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>Atölye Çalışmaları</h3>
+            <p>Erken dönem üretim süreçleri</p>
           </div>
         </div>
         
-        <div class="image-card">
-          <div class="image-container">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0022.jpg" data-lightbox="kurulus" data-title="Ekip Çalışması">
             <img src="img/yunus bey nostaji/Scan0022.jpg" alt="Ekip Çalışması">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">Ekip Çalışması</h3>
-            <p class="text-gray-600">İlk çalışanlarımızla birlikte</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>Ekip Çalışması</h3>
+            <p>İlk çalışanlarımızla birlikte</p>
           </div>
         </div>
         
-        <div class="image-card">
-          <div class="image-container">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0023.jpg" data-lightbox="kurulus" data-title="Makine Testleri">
             <img src="img/yunus bey nostaji/Scan0023.jpg" alt="Makine Testleri">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">Makine Testleri</h3>
-            <p class="text-gray-600">Kalite kontrol süreçleri</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>Makine Testleri</h3>
+            <p>Kalite kontrol süreçleri</p>
           </div>
         </div>
         
-        <div class="image-card">
-          <div class="image-container">
+        <div class="photo-card">
+          <a href="img/yunus bey nostaji/Scan0024.jpg" data-lightbox="kurulus" data-title="İlk Başarılar">
             <img src="img/yunus bey nostaji/Scan0024.jpg" alt="İlk Başarılar">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800">İlk Başarılar</h3>
-            <p class="text-gray-600">Kuruluş yıllarındaki başarılar</p>
+          </a>
+          <div class="photo-card-content">
+            <h3>İlk Başarılar</h3>
+            <p>Kuruluş yıllarındaki başarılar</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Fuarlar Bölümü -->
-    <section class="py-16 px-6 max-w-6xl mx-auto bg-gray-50">
-      <div class="highlight-box">
-        <h2 class="text-4xl font-bold text-[#a68e3f] mb-6">Fuar Katılımları</h2>
-        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
-          Geçmişten Günümüze olarak yurtiçi ve yurtdışındaki birçok önemli fuarda yer aldık. Ürünlerimizi sektör profesyonelleriyle buluşturduğumuz bu etkinlikler, global ağımızı büyütmemize katkı sağladı.
-          <br><br>
-          Katıldığımız fuarlarda hem yeni teknolojilerimizi tanıtma fırsatı bulduk, hem de sektördeki gelişmeleri yakından takip ettik. Müşterilerimizle yüz yüze iletişim kurma imkanı bulduğumuz bu organizasyonlar, bizi her zaman bir adım öne taşıdı.
+    <!-- Fuar Katılımları Bölümü -->
+    <section class="content-section" style="background: #f9f9f9; padding: 80px 20px; margin: 0;">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="section-header">
+          <h2>Fuar Katılımları</h2>
+          <p>
+            Geçmişten günümüze yurtiçi ve yurtdışındaki birçok önemli fuarda yer aldık. 
+            Ürünlerimizi sektör profesyonelleriyle buluşturduğumuz bu etkinlikler, global ağımızı 
+            büyütmemize katkı sağladı. Katıldığımız fuarlarda hem yeni teknolojilerimizi tanıtma 
+            fırsatı bulduk, hem de sektördeki gelişmeleri yakından takip ettik.
+          </p>
+        </div>
+        
+        <div class="photo-grid">
+          <div class="photo-card">
+            <a href="img/yunus bey nostaji/Scan0013.jpg" data-lightbox="fuar" data-title="Erken Dönem Fuar Katılımı">
+              <img src="img/yunus bey nostaji/Scan0013.jpg" alt="Fuar Katılımı">
+            </a>
+            <div class="photo-card-content">
+              <h3>Erken Dönem Fuarları</h3>
+              <p>İlk fuar deneyimlerimiz</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/11.jpg" data-lightbox="fuar" data-title="Fuar Standımız">
+              <img src="img/kurumsal/11.jpg" alt="Fuar Standı">
+            </a>
+            <div class="photo-card-content">
+              <h3>Fuar Standımız</h3>
+              <p>Profesyonel katılım</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/12.jpg" data-lightbox="fuar" data-title="Ürün Tanıtımı">
+              <img src="img/kurumsal/12.jpg" alt="Ürün Tanıtımı">
+            </a>
+            <div class="photo-card-content">
+              <h3>Ürün Tanıtımı</h3>
+              <p>Makinelerimizi tanıtıyoruz</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/13.jpg" data-lightbox="fuar" data-title="Ziyaretçilerle İletişim">
+              <img src="img/kurumsal/13.jpg" alt="Ziyaretçiler">
+            </a>
+            <div class="photo-card-content">
+              <h3>Ziyaretçilerle İletişim</h3>
+              <p>Müşteri buluşmaları</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/14.jpg" data-lightbox="fuar" data-title="Fuar Etkinlikleri">
+              <img src="img/kurumsal/14.jpg" alt="Fuar Etkinliği">
+            </a>
+            <div class="photo-card-content">
+              <h3>Fuar Etkinlikleri</h3>
+              <p>Özel sunumlar</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/15.jpg" data-lightbox="fuar" data-title="Uluslararası Katılım">
+              <img src="img/kurumsal/15.jpg" alt="Uluslararası">
+            </a>
+            <div class="photo-card-content">
+              <h3>Uluslararası Katılım</h3>
+              <p>Yurtdışı fuarlar</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/16.jpg" data-lightbox="fuar" data-title="Stand Tasarımı">
+              <img src="img/kurumsal/16.jpg" alt="Stand Tasarımı">
+            </a>
+            <div class="photo-card-content">
+              <h3>Stand Tasarımı</h3>
+              <p>Modern görünüm</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/17.jpg" data-lightbox="fuar" data-title="Teknoloji Sunumu">
+              <img src="img/kurumsal/17.jpg" alt="Teknoloji">
+            </a>
+            <div class="photo-card-content">
+              <h3>Teknoloji Sunumu</h3>
+              <p>Yenilikçi ürünler</p>
+            </div>
+          </div>
+          
+          <div class="photo-card">
+            <a href="img/kurumsal/18.jpg" data-lightbox="fuar" data-title="Sektör Buluşması">
+              <img src="img/kurumsal/18.jpg" alt="Sektör Buluşması">
+            </a>
+            <div class="photo-card-content">
+              <h3>Sektör Buluşması</h3>
+              <p>Profesyonel network</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bugün Bölümü -->
+    <section class="content-section">
+      <div class="section-header">
+        <h2>Bugün</h2>
+        <p>
+          Bugün 10.000 m² alanda üretim yapan, 100'ü aşkın çalışanıyla modern bir firma olarak 
+          sektördeki liderliğimizi sürdürüyoruz. Kurucumuz Yunus Ulupnar'ın mirasını yaşatarak, 
+          onun vizyonunu daha da ileriye taşıyoruz. Modern üretim tesislerimiz, Ar-Ge departmanımız 
+          ve uzman ekibimizle sürekli yenilik peşindeyiz.
         </p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="image-card">
-          <div class="image-container">
-            <img src="img/yunus bey nostaji/Scan0013.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div>
-        <div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/11.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+      
+      <div class="photo-grid">
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/1.jpeg" data-lightbox="bugun" data-title="ANKOMAK Standı">
+            <img src="img/YENİ FUAR/1.jpeg" alt="ANKOMAK Standı">
+          </a>
+          <div class="photo-card-content">
+            <h3>ANKOMAK Standı</h3>
+            <p>Modern fuar katılımı</p>
           </div>
         </div>
-        <div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/12.jpg" alt="Fuar Katılımı 1">
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/2.jpeg" data-lightbox="bugun" data-title="Makine Tanıtımı">
+            <img src="img/YENİ FUAR/2.jpeg" alt="Makine Tanıtımı">
+          </a>
+          <div class="photo-card-content">
+            <h3>Makine Tanıtımı</h3>
+            <p>Ürün sunumları</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/3.jpeg" data-lightbox="bugun" data-title="Ziyaretçilerle Buluşma">
+            <img src="img/YENİ FUAR/3.jpeg" alt="Ziyaretçi Buluşması">
+          </a>
+          <div class="photo-card-content">
+            <h3>Ziyaretçilerle Buluşma</h3>
+            <p>Müşteri etkileşimi</p>
           </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/13.jpg" alt="Fuar Katılımı 1">
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/4.jpeg" data-lightbox="bugun" data-title="Ürün Tanıtımı">
+            <img src="img/YENİ FUAR/4.jpeg" alt="Ürün Tanıtımı">
+          </a>
+          <div class="photo-card-content">
+            <h3>Ürün Tanıtımı</h3>
+            <p>Yeni teknolojiler</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/5.jpeg" data-lightbox="bugun" data-title="Etkinlik Alanı">
+            <img src="img/YENİ FUAR/5.jpeg" alt="Etkinlik Alanı">
+          </a>
+          <div class="photo-card-content">
+            <h3>Etkinlik Alanı</h3>
+            <p>Özel sunumlar</p>
           </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/14.jpg" alt="Fuar Katılımı 1">
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/6.jpeg" data-lightbox="bugun" data-title="Makine Sunumu">
+            <img src="img/YENİ FUAR/6.jpeg" alt="Makine Sunumu">
+          </a>
+          <div class="photo-card-content">
+            <h3>Makine Sunumu</h3>
+            <p>Canlı demonstrasyon</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/7.jpeg" data-lightbox="bugun" data-title="Ziyaretçi Etkileşimi">
+            <img src="img/YENİ FUAR/7.jpeg" alt="Ziyaretçi Etkileşimi">
+          </a>
+          <div class="photo-card-content">
+            <h3>Ziyaretçi Etkileşimi</h3>
+            <p>Aktif katılım</p>
           </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/15.jpg" alt="Fuar Katılımı 1">
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/8.jpeg" data-lightbox="bugun" data-title="Yeni Ürünler">
+            <img src="img/YENİ FUAR/8.jpeg" alt="Yeni Ürünler">
+          </a>
+          <div class="photo-card-content">
+            <h3>Yeni Ürünler</h3>
+            <p>İnovatif çözümler</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/9.jpeg" data-lightbox="bugun" data-title="Tanıtım Broşürleri">
+            <img src="img/YENİ FUAR/9.jpeg" alt="Tanıtım Materyalleri">
+          </a>
+          <div class="photo-card-content">
+            <h3>Tanıtım Broşürleri</h3>
+            <p>Bilgilendirme</p>
           </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/16.jpg" alt="Fuar Katılımı 1">
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/10.jpeg" data-lightbox="bugun" data-title="Katılımcılarla Etkileşim">
+            <img src="img/YENİ FUAR/10.jpeg" alt="Katılımcı Etkileşimi">
+          </a>
+          <div class="photo-card-content">
+            <h3>Katılımcılarla Etkileşim</h3>
+            <p>İş ortaklıkları</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/12.jpeg" data-lightbox="bugun" data-title="Fuardan Kareler">
+            <img src="img/YENİ FUAR/12.jpeg" alt="Fuardan Kareler">
+          </a>
+          <div class="photo-card-content">
+            <h3>Fuardan Kareler</h3>
+            <p>Özel anlar</p>
           </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/17.jpg" alt="Fuar Katılımı 1">
+        </div>
+        
+        <div class="photo-card">
+          <a href="img/YENİ FUAR/13.jpeg" data-lightbox="bugun" data-title="Ziyaretçi Yoğunluğu">
+            <img src="img/YENİ FUAR/13.jpeg" alt="Ziyaretçi Yoğunluğu">
+          </a>
+          <div class="photo-card-content">
+            <h3>Ziyaretçi Yoğunluğu</h3>
+            <p>Yoğun ilgi</p>
           </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/18.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/19.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/20.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/21.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/22.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
-        </div><div class="image-card">
-          <div class="image-container">
-            <img src="img/kurumsal/23.jpg" alt="Fuar Katılımı 1">
-          </div>
-          <div class="card-content">
-            <h3 class="font-semibold text-lg text-gray-800"></h3>
-            <p class="text-gray-600"></p>
-          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Bugün ve Başarılar -->
-    <section id="bugun" class="py-16 px-6 max-w-6xl mx-auto">
-      <div class="highlight-box">
-        <h2 class="text-4xl font-bold text-[#a68e3f] mb-6">Bugün</h2>
-        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
-          Bugün 10.000 m² alanda üretim yapan, 100'ü aşkın çalışanıyla yılda 50'den fazla makine üreten bir firma olarak sektördeki liderliğimizi sürdürüyoruz. Kurucumuz Yunus Ulupnar'ın mirasını yaşatarak, onun vizyonunu daha da ileriye taşıyoruz.
-          <br><br>
-          Modern üretim tesislerimiz, Ar-Ge departmanımız ve uzman ekibimizle sürekli yenilik peşindeyiz. Müşteri memnuniyetini her şeyin üzerinde tutan anlayışımız, bizi sektörde farklı kılan en önemli özelliğimiz olmaya devam ediyor.
+    <!-- Footer -->
+    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] py-6 w-full">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0">
+        
+        <!-- Logo -->
+        <a href="index.html">
+          <img src="img/anko_logo.png" alt="ANKOMAK" class="h-6 w-auto" />
+        </a>
+
+        <!-- Linkler -->
+        <nav class="footer-links flex flex-col md:flex-row md:space-x-8 text-white text-sm font-medium items-center md:items-start">
+          <a href="index.html" class="mb-1 hover:text-gray-200 transition">Ana Sayfa</a>
+          <a href="kurumsal.html" class="mb-1 hover:text-gray-200 transition">Hakkımızda</a>
+          <a href="gecmisten-gunumuze-ankomak.html" class="mb-1 hover:text-gray-200 transition">Geçmişten Günümüze ANKOMAK</a>
+
+          <!-- Basın ve Medya hover menü -->
+          <div class="relative group mb-1">
+            <span class="font-bold cursor-pointer text-center block hover:text-gray-200 transition">
+              Basın ve Medya
+            </span>
+            <div class="absolute left-0 top-full hidden group-hover:block bg-[#b08f23] text-white text-sm py-2 px-4 rounded-b shadow-lg space-y-2 z-10 min-w-[180px]">
+              <a href="BasındaAnkoMak.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+                Basında ANKOMAK
+              </a>
+              <a href="Videolarımız.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+                Video Galeri
+              </a>
+            </div>
+          </div>
+
+          <a href="Makinalarımız.html" class="mb-1 hover:text-gray-200 transition">Makinelerimiz</a>
+          <a href="iletisim.html" class="hover:text-gray-200 transition">İletişim</a>
+        </nav>
+      </div>
+
+      <!-- Alt Kısım -->
+      <div class="footer-bottom text-center mt-6 text-white text-xs">
+        <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
+        <p class="mt-1">
+          <a href="#" class="hover:underline">Gizlilik Politikası</a> | <a href="#" class="hover:underline">Yasal Uyarı</a>
         </p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/1.jpeg" alt="Fuardan Görsel 1">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">ANKOMAK Standı</h3>
-    </div>
-  </div>
+    </footer>
 
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/2.jpeg" alt="Fuardan Görsel 2">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Makine Tanıtımı</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/3.jpeg" alt="Fuardan Görsel 3">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Ziyaretçilerle Buluşma</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/4.jpeg" alt="Fuardan Görsel 4">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Ürün Tanıtımı</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/5.jpeg" alt="Fuardan Görsel 5">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Etkinlik Alanı</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/6.jpeg" alt="Fuardan Görsel 6">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Makine Sunumu</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/7.jpeg" alt="Fuardan Görsel 7">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Ziyaretçi Etkileşimi</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/8.jpeg" alt="Fuardan Görsel 8">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Yeni Ürünler</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/9.jpeg" alt="Fuardan Görsel 9">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Tanıtım Broşürleri</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/10.jpeg" alt="Fuardan Görsel 10">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Katılımcılarla Etkileşim</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/12.jpeg" alt="Fuardan Görsel 12">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800"> Fuardan Kareler</h3>
-    </div>
-  </div>
-
-  <div class="image-card">
-    <div class="image-container">
-      <img src="img/YENİ FUAR/13.jpeg" alt="Fuardan Görsel 13">
-    </div>
-    <div class="card-content">
-      <h3 class="font-semibold text-lg text-gray-800">Ziyaretçi Yoğunluğu</h3>
-    </div>
-  </div>
-</div>
-
-    </section>
-
-    <!-- Image Modal -->
-    <div id="imageModal" class="image-modal">
-      <span class="close-modal" onclick="closeModal()">&times;</span>
-      <img class="modal-content" id="modalImage">
-    </div>
-
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
     <script>
-      // Slider Script
+      // Lightbox ayarları
+      lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'alwaysShowNavOnTouchDevices': true,
+        'disableScrolling': true,
+        'fadeDuration': 300,
+        'imageFadeDuration': 300,
+        'showImageNumberLabel': true,
+        'enableKeyboardNav': true
+      });
+    </script>
+
+    <!-- Slider Script -->
+    <script>
       document.addEventListener('DOMContentLoaded', function() {
         const slides = document.querySelectorAll('.banner-slide');
         const dots = document.querySelectorAll('.slider-dot');
         const prevArrow = document.querySelector('.slider-arrow.prev');
         const nextArrow = document.querySelector('.slider-arrow.next');
         let currentSlide = 0;
-        const slideInterval = 5000; // 5 saniye
+        const slideInterval = 5000;
         let slideTimer;
         
         function goToSlide(n) {
@@ -999,10 +934,8 @@
           slideTimer = setInterval(nextSlide, slideInterval);
         }
         
-        // Slider başlat
         startSlider();
         
-        // Dot'lara tıklama eventi
         dots.forEach((dot, index) => {
           dot.addEventListener('click', () => {
             clearInterval(slideTimer);
@@ -1011,7 +944,6 @@
           });
         });
         
-        // Ok butonları eventleri
         nextArrow.addEventListener('click', () => {
           clearInterval(slideTimer);
           nextSlide();
@@ -1024,7 +956,6 @@
           startSlider();
         });
         
-        // Banner'a hover olunca slider'ı durdur
         const banner = document.querySelector('.banner');
         banner.addEventListener('mouseenter', () => {
           clearInterval(slideTimer);
@@ -1035,55 +966,19 @@
         });
       });
 
-      // Modal açma fonksiyonu
-      function openModal(element) {
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImage");
-        const img = element.querySelector('.image-container img');
-        
-        modal.style.display = "block";
-        modalImg.src = img.src;
-        modalImg.alt = img.alt;
-        
-        // Sayfa kaydırmayı engelle
-        document.body.style.overflow = "hidden";
-      }
-      
-      // Modal kapatma fonksiyonu
-      function closeModal() {
-        const modal = document.getElementById("imageModal");
-        modal.style.display = "none";
-        
-        // Sayfa kaydırmayı tekrar aktif et
-        document.body.style.overflow = "auto";
-      }
-      
-      // Modal dışına tıklayarak kapatma
-      window.onclick = function(event) {
-        const modal = document.getElementById("imageModal");
-        if (event.target == modal) {
-          closeModal();
-        }
-      }
-
-      // Tüm kartlara tıklanabilirlik ekleme
-      document.querySelectorAll('.image-card').forEach(card => {
-        card.addEventListener('click', function() {
-          openModal(this);
-        });
-      });
-
-      // Mobil menü fonksiyonları
+      // Mobil menü
       const menuButton = document.getElementById('menuButton');
       const closeMenu = document.getElementById('closeMenu');
       const mobileMenu = document.getElementById('mobileMenu');
 
       menuButton.addEventListener('click', function() {
         mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('active');
         document.body.style.overflow = 'hidden';
       });
 
       closeMenu.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
         mobileMenu.classList.add('hidden');
         document.body.style.overflow = 'auto';
       });
@@ -1098,33 +993,6 @@
         }
       });
     </script>
-
-    <!-- Footer -->
-    <footer
-      class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] h-32 w-full"
-    >
-      <div class="footer-container-flex">
-        <div class="footer-container">
-          <a href="index.html"
-            ><img
-              src="img\anko_logo.png"
-              alt="ANKOMAK"
-              class="h-12 w-auto"
-          /></a>
-          <nav class="footer-links">
-            <a href="index.html">Ana Sayfa</a>
-            <a href="kurumsal.html">Hakkımızda</a>
-            <a href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
-            <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
-            <a href="Makinalarımız.html">Makinalarımız</a>
-            <a href="iletisim.html">İletişim</a>
-          </nav>
-        </div>
-      </div>
-      <div class="footer-bottom text-center mt-4">
-        <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
-        <p>Gizlilik Politikası | Yasal Uyarı</p>
-      </div>
-    </footer>
+    <script src="mobile.js"></script>
   </body>
 </html>

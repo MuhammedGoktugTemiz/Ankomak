@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/banner.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
     <link rel="icon" type="image/avif" href="icon.avif" />
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <style>
@@ -65,7 +65,7 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s;
-        height: 300px; /* Yükseklik artırıldı */
+        height: 300px;
       }
       
       .gallery-item:hover {
@@ -152,7 +152,8 @@
         min-height: 500px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-end;
+        padding-bottom: 10%;
         color: white;
         overflow: hidden;
         background-color: #333;
@@ -278,51 +279,244 @@
       .button:hover span {
         margin-left: 10px;
       }
+
+      /* Navbar alt menü stilleri */
+      .navbar ul li {
+        position: relative;
+      }
+
+      .navbar ul li ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        min-width: 200px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .navbar ul li:hover ul {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .navbar ul li ul li {
+        padding: 0;
+      }
+
+      .navbar ul li ul li a {
+        display: block;
+        padding: 10px 20px;
+        color: #333;
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+
+      .navbar ul li ul li a:hover {
+        background: #f5f5f5;
+        color: #a68e3f;
+      }
+
+      /* Machine Slider Stilleri */
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+
+      .machine-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .machine-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Mobil Stiller */
+      @media (max-width: 768px) {
+        .navbar ul {
+          display: none;
+        }
+
+        .banner {
+          height: 50vh;
+        }
+
+        .banner-content h1 {
+          font-size: 24px;
+        }
+
+        .banner-content p {
+          font-size: 14px;
+        }
+
+        .photo-gallery {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-content h2 {
+          font-size: 24px;
+        }
+
+        .about-content p {
+          font-size: 14px;
+        }
+
+        .mission-vision-card {
+          padding: 10px;
+        }
+
+        .mission-vision-card h3 {
+          font-size: 18px;
+        }
+
+        .mission-vision-card p {
+          font-size: 14px;
+        }
+
+        .button {
+          padding: 8px 16px;
+          font-size: 14px;
+        }
+
+        .footer-links {
+          flex-direction: column;
+        }
+
+        .footer-links a {
+          margin: 5px 0;
+        }
+
+        .footer-bottom p {
+          font-size: 12px;
+        }
+
+        .navbar ul li ul {
+          position: static;
+          opacity: 1;
+          visibility: visible;
+          box-shadow: none;
+          display: none;
+        }
+
+        .navbar ul li:hover ul {
+          display: block;
+        }
+      }
     </style>
   </head>
   <body>
     <nav id="navbar" class="navbar p-4 z-30">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a href="index.html">
-          <img src="img/anko_logo.png" class="h-12 w-auto" />
+        <a href="index.html" class="flex items-center">
+          <img src="img/anko_logo.png" class="h-12 w-auto" alt="ANKOMAK Logo" />
         </a>
         
-        <ul class="hidden md:flex space-x-8 menu1">
-          <li class="transition cursor-pointer font-bold">
-            <a href="index.html">Ana Sayfa <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+        <ul class="hidden md:flex space-x-6 menu1">
+          <li class="transition cursor-pointer font-semibold">
+            <a href="index.html" class="active">Ana Sayfa <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
+          <li class="transition cursor-pointer font-semibold">
             <a href="kurumsal.html">Hakkımızda <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze ANKOMAK <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="BasındaAnkoMak.html">Basında ANKOMAK <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          <li class="transition cursor-pointer font-semibold relative group">
+            <a href="#" class="flex items-center">Basın Ve Medya <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span>
+              <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+              </li>
+              <li>
+                <a href="Videolarımız.html">Video Galeri</a>
+              </li>
+            </ul>
           </li>
-          <li class="transition cursor-pointer font-bold">
-            <a href="Makinalarımız.html">Makinalarımız <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
+          <li class="transition cursor-pointer font-semibold">
+            <a href="Makinalarımız.html">Makinelerimiz <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
-          <li class="transition cursor-pointer font-bold">
+          <li class="transition cursor-pointer font-semibold">
             <a href="iletisim.html">İletişim <span class="left-border"></span><span class="right-border"></span><span class="bottom-border"></span></a>
           </li>
         </ul>
-        <button id="menuButton" class="md:hidden text-2xl">☰</button>
+        
+        <button id="menuButton" class="md:hidden text-2xl focus:outline-none" aria-label="Menüyü Aç">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </nav>
 
     <!-- Mobil Menü -->
-    <div id="mobileMenu" class="mobile-menu p-6 flex flex-col space-y-6 md:hidden z-40">
-      <button id="closeMenu" class="self-end text-black text-2xl font-bold">X</button>
-      <a class="font-bold" href="index.html">Ana Sayfa</a>
-      <a class="font-bold" href="kurumsal.html">Hakkımızda</a>
-      <a class="font-bold" href="gecmisten-gunümüze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
-      <a class="font-bold" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
-      <a class="font-bold" href="Makinalarımız.html">Makinalarımız</a>
-      <a class="font-bold" href="iletisim.html">İletişim</a>
+    <div id="mobileMenu" class="mobile-menu hidden md:hidden z-40">
+      <div class="mobile-menu-header">
+        <div class="flex items-center">
+          <img src="img/anko_logo.png" class="h-8 w-auto mr-3" alt="ANKOMAK Logo" />
+          <span class="font-bold text-lg">ANKOMAK</span>
+        </div>
+        <button id="closeMenu" class="mobile-menu-close" aria-label="Menüyü Kapat">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="mobile-menu-nav">
+        <a class="mobile-menu-link" href="index.html">Ana Sayfa</a>
+        <a class="mobile-menu-link" href="kurumsal.html">Hakkımızda</a>
+        <a class="mobile-menu-link" href="gecmisten-gunumuze-ankomak.html">Geçmişten Günümüze</a>
+
+        <!-- Basın ve Medya açılır menü -->
+        <div class="mobile-submenu">
+          <button 
+            class="mobile-submenu-title"
+            onclick="toggleMobileDropdown('mediaSubmenu', this)"
+          >
+            <span>Basın ve Medya</span>
+            <span class="arrow">▼</span>
+          </button>
+
+          <div id="mediaSubmenu" class="hidden">
+            <a class="mobile-submenu-link" href="BasındaAnkoMak.html">Basında ANKOMAK</a>
+            <a class="mobile-submenu-link" href="Videolarımız.html">Video Galeri</a>
+          </div>
+        </div>
+
+        <a class="mobile-menu-link" href="Makinalarımız.html">Makinelerimiz</a>
+        <a class="mobile-menu-link" href="iletisim.html">İletişim</a>
+      </nav>
     </div>
 
+
+  
+
+
+
     <script>
+       function toggleMobileDropdown(id, btn) {
+    const submenu = document.getElementById(id);
+    const arrow = btn.querySelector(".arrow");
+    submenu.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
+  }
       const navbar = document.getElementById("navbar");
       const menuButton = document.getElementById("menuButton");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -349,9 +543,21 @@
     <section class="banner flex flex-col items-start text-start px-6 md:px-12 lg:px-24">
       <!-- Banner Slider -->
       <div class="banner-slide active" style="background-image: url('img/arkaplan/KAYAN1.jpeg');"></div>
-      <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN2.jpeg');"></div>
+      <div class="banner-slite" style="background-image: url('img/arkaplan//KAYAN2.jpeg');"></div>
       <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN3.jpeg');"></div>
       <div class="banner-slide" style="background-image: url('img/arkaplan//KAYAN4.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/künefe..png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/içli.png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/içidolguu.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/yumurta.png');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/tutku.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı1.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı2.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/mantı3.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/simit.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/lavaş.jpeg');"></div>
+      <div class="banner-slide" style="background-image: url('img/arkaplan/kolböreği.jpg');"></div>
       
       <!-- Slider Navigation Arrows -->
       <div class="slider-nav">
@@ -368,27 +574,31 @@
       </div>
       
       <!-- Slider Dots -->
-      <div class="slider-dots flex justify-center gap-2">
+      <div class="slider-dots">
         <div class="slider-dot active w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="0"></div>
         <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="1"></div>
         <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="2"></div>
         <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="3"></div>
         <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="4"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="5"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="6"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="7"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="8"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="9"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="10"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="11"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="12"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="13"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="14"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="15"></div>
+        <div class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300" data-index="16"></div>
       </div>
       
       <!-- Banner Content -->
-      <div class="banner-content">
-        <h1 class="text-4xl md:text-5xl font-bold">
-          ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. <br />
-          <br>
-          <span class="font-extrabold">Siz Hayal Edin Biz Üretelim</span>
-        </h1>
-        <br>
-        <br>
-
-        <p class="mt-4 text-lg md:text-xl max-w-lg">
-          FİRMAMIZ, ÜRETİM HATTINIZ İÇİN GEREKEN BİLUMUM TEKNOLOJİYİ VE MAKİNALARI ÜRÜN GELİŞTİRME ANAHTAR TESLİM KURMAKTADIR.
-        </p>
+      <div class="flex flex-col items-center justify-center text-center min-h-screen">
+        <h2 class="text-4xl md:text-5xl font-bold">
+         
+        </h2>
       </div>
     </section>
 
@@ -477,7 +687,7 @@
         
         <!-- Fotoğraf 2 -->
         <div class="gallery-item">
-          <a href="img/yunus bey nostaji/Scan0011.jpg" data-lightbox="emek-galerisi" data-title="GELİŞİM - GELİŞİM SÜRECİ">
+          <a href="img/ana-sayfa/x.jpg" data-lightbox="emek-galerisi" data-title="GELİŞİM - GELİŞİM SÜRECİ">
             <img src="img/ana-sayfa/x.jpg" alt="GELİŞİM">
             <div class="gallery-caption">
               <h3 class="font-bold">GELİŞİM</h3>
@@ -498,60 +708,316 @@
         </div>
       </div>
       <div id="custom-lightbox" class="hidden">
-  <span id="close-lightbox" class="close-btn">×</span>
-  <img id="lightbox-img" src="" alt="">
-  <div id="lightbox-caption"></div>
-</div>
+        <span id="close-lightbox" class="close-btn">×</span>
+        <img id="lightbox-img" src="" alt="">
+        <div id="lightbox-caption"></div>
+      </div>
 
-<style>
-  #custom-lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  #custom-lightbox.hidden {
-    display: none;
-  }
-  .close-btn {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-  }
-  #lightbox-img {
-    max-height: 80vh;
-    max-width: 80vw;
-  }
-</style>
+      <style>
+        #custom-lightbox {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.9);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+        #custom-lightbox.hidden {
+          display: none;
+        }
+        .close-btn {
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          color: white;
+          font-size: 40px;
+          cursor: pointer;
+        }
+        #lightbox-img {
+          max-height: 80vh;
+          max-width: 80vw;
+        }
+      </style>
 
-<script>
-  document.querySelectorAll('.photo-gallery a').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const imgSrc = this.getAttribute('href');
-      const caption = this.getAttribute('data-title');
-      
-      document.getElementById('lightbox-img').src = imgSrc;
-      document.getElementById('lightbox-caption').textContent = caption;
-      document.getElementById('custom-lightbox').classList.remove('hidden');
-    });
-  });
+      <script>
+        document.querySelectorAll('.photo-gallery a').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const imgSrc = this.getAttribute('href');
+            const caption = this.getAttribute('data-title');
+            
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-caption').textContent = caption;
+            document.getElementById('custom-lightbox').classList.remove('hidden');
+          });
+        });
 
-  document.getElementById('close-lightbox').addEventListener('click', function() {
-    document.getElementById('custom-lightbox').classList.add('hidden');
-  });
-</script>
+        document.getElementById('close-lightbox').addEventListener('click', function() {
+          document.getElementById('custom-lightbox').classList.add('hidden');
+        });
+      </script>
     </section>
 
+    <!-- Makinelerimiz Slider -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">MAKİNELERİMİZ</h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Gıda üretiminde kullanılan çeşitli makinelerimizi keşfedin
+          </p>
+        </div>
+        
+        <div class="relative">
+          <!-- Scroll Container -->
+          <div id="machineSlider" class="flex overflow-x-auto scrollbar-hide gap-6 pb-4" style="scroll-behavior: smooth;">
+            <!-- Makine Kartları -->
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='hamur-acma-makinasi.html'">
+              <img src="img/Makinalar/hamuracmamak.jpg" alt="HAMUR AÇMA MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">HAMUR AÇMA MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik hamur açma makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='manti-makinasi.html'">
+              <img src="img/Makinalar/manti/25042019182224_manti_makinasi_3.jpg" alt="MANTI MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">MANTI MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik mantı yapma makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='baklava-makinasi.html'">
+              <img src="img/Makinalar/baklava1.png" alt="BAKLAVA MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">BAKLAVA MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik baklava yapma makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='dolgu-kurabiye-makinasi.html'">
+              <img src="img/Makinalar/dolgulu-kurabiye/pexels-ali-dashti-506667798-17192200.jpg" alt="DOLGU KURABİYE MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">DOLGU KURABİYE MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Dolgulu kurabiye üretim makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='kizartma-makinasi.html'">
+              <img src="img/Makinalar/kizartmamak.jpg" alt="KIZARTMA MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">KIZARTMA MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Endüstriyel kızartma ünitesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='donut-makinasi.html'">
+              <img src="img/Makinalar/donut/3.jpg" alt="DONUT MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">DONUT MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik donut üretim makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='icli-kofte-makinasi.html'">
+              <img src="img/Makinalar/içliköfte/23052021214802_85018308_141243444025905_4204076407277597948_n_(1)_-_kopya.jpg" alt="İÇLİ KÖFTE MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">İÇLİ KÖFTE MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik içli köfte makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='pankek-makinasi.html'">
+              <img src="img/Makinalar/pankek/composition-tasty-breakfast-pancakes.jpg" alt="PANKEK MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">PANKEK MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik pankek üretim makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='simit-makinasi.html'">
+              <img src="img/Makinalar/simit/23052021163752_turk_simiti.jpg" alt="SİMİT MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">SİMİT MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik simit üretim makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='hamur-acma-makinasi.html'">
+              <img src="img/arkaplan/kolböreği.jpg" alt="KOLBÖREĞİ MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">KOLBÖREĞİ MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik kolböreği üretim makinesi</p>
+              </div>
+            </div>
+
+            <div class="machine-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer flex-shrink-0 w-80" onclick="window.location.href='durum-makinasi.html'">
+              <img src="img/arkaplan/lavaş.jpeg" alt="LAVAŞ MAKİNASI" class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-bold text-[#a68e3f]">LAVAŞ MAKİNESİ</h3>
+                <p class="text-sm mt-2 text-gray-700">Otomatik lavaş üretim makinesi</p>
+              </div>
+            </div>
+            
+            
+            
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="text-center mt-8">
+          <a href="Makinalarımız.html" class="inline-flex items-center bg-[#a68e3f] hover:bg-[#8a7634] text-white px-8 py-3 rounded font-bold transition">
+            Tüm Makineleri Gör
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Galeri -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">FUAR TANITIM VİDEOMUZ</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        ANKOMAK makinelerimizin çalışma prensiplerini ve özelliklerini video galerimizde inceleyebilirsiniz.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 gap-8">
+      <div class="video-card bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+        <div class="relative pb-[56.25%] h-0 overflow-hidden group">
+          <!-- Video -->
+          <video 
+            id="fuarVideo"
+            class="absolute top-0 left-0 w-full h-full" 
+            preload="none" 
+            <video poster="img\YENİ FUAR\videokapak.png" controls width="640" height="360">
+              <source src="video/MERTEM.mp4" type="video/mp4">
+            Tarayıcınız video etiketini desteklemiyor.
+          </video>
+
+          <!-- Play Butonu -->
+          <div id="playButton" 
+               class="absolute inset-0 flex items-center justify-center cursor-pointer transition duration-300 group-hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 fill="white" viewBox="0 0 24 24" 
+                 stroke="black" stroke-width="1.5" 
+                 class="w-20 h-20 bg-black bg-opacity-50 rounded-full p-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 5.75v12.5l8.5-6.25-8.5-6.25z" />
+            </svg>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-2"></h3>
+          <p class="text-gray-600"></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-12">
+      <a href="Videolarımız.html" class="inline-flex items-center bg-[#a68e3f] hover:bg-[#8a7634] text-white px-8 py-3 rounded font-bold transition">
+        Tüm Videoları Gör
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const video = document.getElementById("fuarVideo");
+  const playButton = document.getElementById("playButton");
+
+  playButton.addEventListener("click", () => {
+    playButton.style.display = "none"; // Butonu gizle
+    video.setAttribute("controls", "true"); // Kontrolleri aç
+    video.play(); // Videoyu başlat
+  });
+</script>
+
+<!-- Machine Slider Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('machineSlider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const cardWidth = 320; // 80 * 4 (w-80 = 20rem = 320px)
+    const gap = 24; // 6 * 4 (gap-6 = 1.5rem = 24px)
+    const scrollAmount = cardWidth + gap;
+
+    prevBtn.addEventListener('click', () => {
+      slider.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      slider.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+
+    // Auto-scroll functionality (optional)
+    let autoScroll = setInterval(() => {
+      if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth) {
+        slider.scrollTo({
+          left: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        slider.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      }
+    }, 3000);
+
+    // Pause auto-scroll on hover
+    slider.addEventListener('mouseenter', () => {
+      clearInterval(autoScroll);
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      autoScroll = setInterval(() => {
+        if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth) {
+          slider.scrollTo({
+            left: 0,
+            behavior: 'smooth'
+          });
+        } else {
+          slider.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+          });
+        }
+      }, 3000);
+    });
+  });
+</script>
+
+    
     <section class="max-w-6xl mx-auto my-10 section-background">
       <h2 class="text-3xl font-bold text-center mb-6">Makineler ve Projeler</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -573,6 +1039,75 @@
       </div>
     </section>
 
+    <!-- Katalog Bölümü -->
+    <section class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Kataloglarımız</h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Ürün kataloglarımızı inceleyin ve işletmeniz için en uygun çözümü bulun.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+          <!-- Dondurma Makinesi Katalog -->
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <div class="bg-gradient-to-br from-blue-100 to-indigo-100 p-8 flex items-center justify-center">
+              <div class="text-center">
+                <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Dondurma Makinesi</h3>
+                <p class="text-gray-600 text-sm">PDF Katalog</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-800 mb-2">Özellikler</h4>
+                  <ul class="space-y-1 text-gray-600 text-sm">
+                    <li class="flex items-center">
+                      <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      Yüksek verimlilik
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      Enerji tasarrufu
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      Kolay kullanım
+                    </li>
+                  </ul>
+                </div>
+                <div class="pt-2">
+                  <a href="img\25 Ice cream machine Catalogue-Anko Mertem.pdf" 
+                     class="inline-flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg text-sm"
+                     target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    İndir (PDF)
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ISORTYM Katalog -->
+      </div>
+    </section>
+
+   
+    
     <section class="about-section about-background py-16 px-4 sm:px-6 lg:px-8">
       <div class="about-content space-y-6">
         <div class="inline-block flex justify-between items-center">
@@ -602,7 +1137,7 @@
               <h3 class="text-2xl font-bold text-gray-800">Misyonumuz</h3>
             </div>
             <p class="text-gray-600 pl-14 text-lg leading-relaxed">
-              Üretim süreçlerinizi kolaylaştırmak, verimliliğinizi artırmak ve rekabet gücünüzü güçlendirmek için yanınızdayız.
+              Ülkemizde Teknoloji sınırlı haldeyken biz bu makineleri üretip yurtdışına açarak Türk gıda sektörünün gelişimine katkı sağladık ve yerli üretimi desteklemek için elimizden geleni yıllar boyunca yaptık.
             </p>
           </div>
       
@@ -611,13 +1146,13 @@
             <div class="flex items-center mb-4">
               <div class="bg-[#a68e3f]/10 p-3 rounded-full mr-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#a68e3f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <h3 class="text-2xl font-bold text-gray-800">Vizyonumuz</h3>
             </div>
             <p class="text-gray-600 pl-14 text-lg leading-relaxed">
-              Türk gıda sektörünü dünya standartlarına taşımak ve yerli üretimi destekleyerek ekonomiye katkı sağlamak.
+              Türk mutfağının dünyaya açılmasında öncü olmak ve gıda üretiminde en son teknolojileri kullanarak sektördeki liderliğimizi sürdürmektir. Müşterilerimize en kaliteli makineleri sunarak, onların üretim süreçlerini daha verimli ve sürdürülebilir hale getirmeyi hedefliyoruz.
             </p>
           </div>
         </div>
@@ -635,25 +1170,50 @@
     </section>
 <br>
 <br>
-    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] h-32 w-full">
-      <div class="footer-container-flex">
-        <div class="footer-container">
-          <a href="index.html"><img src="img/anko_logo.png" alt="ANKOMAK" class="h-12 w-auto" /></a>
-          <nav class="footer-links">
-            <a href="index.html" class="">Ana Sayfa</a> 
-            <a href="kurumsal.html">Hakkımızda</a>
-            <a href="gecmisten-gunümüze-ankomak.html">Geçmişten Günümüze ANKOMAK</a>
-            <a href="BasındaAnkoMak.html">Basında ANKOMAK</a>
-            <a href="Makinalarımız.html">Makinalarımız</a>
-            <a href="iletisim.html">İletişim</a>
-          </nav>
-        </div>
-      </div>
-      <div class="footer-bottom text-center mt-4">
-        <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
-        <p>Gizlilik Politikası | Yasal Uyarı</p>
-      </div>
-    </footer>
+    <footer class="footer bg-gradient-to-r from-[#a08017] via-[#b08f23] to-[#867439] py-6 w-full">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0">
+    
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/anko_logo.png" alt="ANKOMAK" class="h-6 w-auto" />
+    </a>
+
+    <!-- Linkler -->
+    <nav class="footer-links flex flex-col md:flex-row md:space-x-8 text-white text-sm font-medium items-center md:items-start">
+
+      <a href="index.html" class="mb-1 hover:text-gray-200 transition">Ana Sayfa</a>
+      <a href="kurumsal.html" class="mb-1 hover:text-gray-200 transition">Hakkımızda</a>
+      <a href="gecmisten-gunumuze-ankomak.html" class="mb-1 hover:text-gray-200 transition">Geçmişten Günümüze ANKOMAK</a>
+
+      <!-- Basın ve Medya hover menü -->
+      <div class="relative group mb-1">
+  <span class="font-bold cursor-pointer text-center block hover:text-gray-200 transition">
+    Basın ve Medya
+  </span>
+  <div class="absolute left-0 top-full hidden group-hover:block bg-[#b08f23] text-white text-sm py-2 px-4 rounded-b shadow-lg space-y-2 z-10 min-w-[180px]">
+    <a href="BasındaAnkoMak.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+      Basında ANKOMAK
+    </a>
+    <a href="Videolarımız.html" class="block hover:underline hover:bg-[#a08017] px-2 py-1 rounded transition">
+      Video Galeri
+    </a>
+  </div>
+</div>
+
+      <a href="Makinalarımız.html" class="mb-1 hover:text-gray-200 transition">Makinelerimiz</a>
+      <a href="iletisim.html" class="hover:text-gray-200 transition">İletişim</a>
+    </nav>
+  </div>
+
+  <!-- Alt Kısım -->
+  <div class="footer-bottom text-center mt-6 text-white text-xs">
+    <p>Telif Hakkı © 2025 ANKO GIDA MAKİNELERİ PAZ. SAN. TİC. LTD. ŞTİ. Tüm Hakları Saklıdır.</p>
+    <p class="mt-1">
+      <a href="#" class="hover:underline">Gizlilik Politikası</a> | <a href="#" class="hover:underline">Yasal Uyarı</a>
+    </p>
+  </div>
+</footer>
+
 
     <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
@@ -687,5 +1247,6 @@
         });
       });
     </script>
+    <script src="mobile.js"></script>
   </body>
 </html>
